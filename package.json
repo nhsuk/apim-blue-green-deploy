@@ -1,0 +1,25 @@
+{
+  "name": "index-switch",
+  "version": "1.0.0",
+  "description": "A function app to switch between an active and idle index to allow for zero azure search downtime with reindexing",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "durable-functions": "^1.1.2",
+    "moment": "^2.23.0",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.5"
+  },
+  "devDependencies": {
+    "eslint": "^5.12.0",
+    "eslint-config-nhsuk": "^0.16.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ."
+  },
+  "author": "Neil McLaughlin",
+  "license": "MIT"
+}

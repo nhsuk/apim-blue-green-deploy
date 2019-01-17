@@ -1,0 +1,9 @@
+{
+  "bindings": [
+    {
+      "name": "idleIndexUrl",
+      "type": "activityTrigger",
+      "direction": "in"
+    }
+  ]
+}
