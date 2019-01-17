@@ -30,11 +30,15 @@ async function updateIndexerTargetIndex(indexerName, idleIndexName) {
   return 'indexer updated';
 }
 
-async function getIndexerName(indexName) {
+async function getIndexerName(indexNames) {
+  // Note: we check against both the active and idle index names in case a previous run failed
+  // and left the indexer pointing at the idle index
   const indexersResponse = await azureIndexersSearchRequest('', 'get');
-  const indexers = indexersResponse.body.value.filter(i => i.targetIndexName === indexName);
+  const indexers = indexersResponse.body.value
+    .filter(i => [indexNames.active, indexNames.idle].includes(i.name));
   if (indexers.length !== 1) {
-    throw Error(`Expected to find exactly one indexer for index ${indexName} (found ${indexers.length})`);
+    const errMsg = `Expected to find exactly one indexer for the indexes ${indexNames} (found ${indexers.length})`;
+    throw Error(errMsg);
   }
   return indexers[0].name;
 }
