@@ -1,13 +1,13 @@
 const azureSearchRequest = require('../lib/AzureSearchRequest');
 
-async function getIndexerStatus() {
+async function getIndexerFullStatus() {
   const searchHostname = process.env['search-hostname'];
   const indexerName = process.env['search-indexer-name'];
   const indexerUrl = `https://${searchHostname}/indexers/${indexerName}`;
-  return await azureSearchRequest(`${indexerUrl}/status`, 'get');
+  return azureSearchRequest(`${indexerUrl}/status`, 'get');
 }
 
-module.exports = async function (context) {
-  const response = await getIndexerStatus(context.bindings.indexName);
+module.exports = async function getIndexerStatus(context) {
+  const response = await getIndexerFullStatus(context.bindings.indexName);
   return response.body.lastResult.status;
 };
