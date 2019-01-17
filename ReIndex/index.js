@@ -1,41 +1,50 @@
 const azureSearchRequest = require('../lib/AzureSearchRequest');
 
-async function copyIndexDefinition(sourceIndexUrl, targetIndexUrl) {
-  const sourceIndexResponse = await azureSearchRequest(sourceIndexUrl, 'get');
+async function azureIndexesSearchRequest(indexName, method, body) {
+  return azureSearchRequest(`indexes/${indexName}`, method, body);
+}
+
+async function azureIndexersSearchRequest(indexerName, method, body) {
+  return azureSearchRequest(`indexers/${indexerName}`, method, body);
+}
+
+async function copyIndexDefinition(sourceIndexName, targetIndexName) {
+  const sourceIndexResponse = await azureIndexesSearchRequest(sourceIndexName, 'get');
   if (sourceIndexResponse.statusCode === 200) {
     const sourceIndexDefinition = sourceIndexResponse.body;
     delete sourceIndexDefinition.name;
-    await azureSearchRequest(targetIndexUrl, 'delete');
-    await azureSearchRequest(targetIndexUrl, 'put', JSON.stringify(sourceIndexDefinition));
+    await azureIndexesSearchRequest(targetIndexName, 'delete');
+    await azureIndexesSearchRequest(targetIndexName, 'put', JSON.stringify(sourceIndexDefinition));
   }
   return 'created';
 }
 
-async function updateIndexerTargetIndex(idleIndexName) {
-  const searchHostname = process.env['search-hostname'];
-  const indexerName = process.env['search-indexer-name'];
-  const indexerUrl = `https://${searchHostname}/indexers/${indexerName}`;
-  const indexerResponse = await azureSearchRequest(indexerUrl, 'get');
+async function updateIndexerTargetIndex(indexerName, idleIndexName) {
+  const indexerResponse = await azureIndexersSearchRequest(indexerName, 'get');
   if (indexerResponse.statusCode === 200) {
     const indexerDefinition = indexerResponse.body;
     indexerDefinition.targetIndexName = idleIndexName;
     delete indexerDefinition.name;
-    await azureSearchRequest(indexerUrl, 'put', JSON.stringify(indexerDefinition));
+    await azureIndexersSearchRequest(indexerName, 'put', JSON.stringify(indexerDefinition));
   }
+  return 'indexer updated';
 }
 
-async function getIndexerUrl() {
-  const searchHostname = process.env['search-hostname'];
-  const indexerName = process.env['search-indexer-name'];
-  return `https://${searchHostname}/indexers/${indexerName}`;
+async function getIndexerName(indexName) {
+  const indexersResponse = await azureIndexersSearchRequest('', 'get');
+  const indexers = indexersResponse.body.value.filter(i => i.targetIndexName === indexName);
+  if (indexers.length !== 1) {
+    throw Error(`Expected to find exactly one indexer for index ${indexName} (found ${indexers.length})`);
+  }
+  return indexers[0].name;
 }
 
 module.exports = async function reindex(context) {
-  const indexingDetails = context.bindings.indexingDetails;
-  const indexerUrl = await getIndexerUrl();
-  await copyIndexDefinition(indexingDetails.active.url, indexingDetails.idle.url);
-  await updateIndexerTargetIndex(indexingDetails.idle.name);
-  await azureSearchRequest(`${indexerUrl}/run`, 'post');
+  const indexNames = context.bindings.indexNames;
+  const indexerName = await getIndexerName(indexNames.active);
+  await copyIndexDefinition(indexNames.active, indexNames.idle);
+  await updateIndexerTargetIndex(indexerName, indexNames.idle);
+  await azureIndexersSearchRequest(`${indexerName}/run`, 'post');
 
-  return indexerUrl;
+  return indexerName;
 };

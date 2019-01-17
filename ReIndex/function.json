@@ -1,7 +1,7 @@
 {
   "bindings": [
     {
-      "name": "indexingDetails",
+      "name": "indexNames",
       "type": "activityTrigger",
       "direction": "in"
     }
