@@ -1,4 +1,3 @@
-const azureSearchRequest = require('../lib/AzureSearchRequest');
 const azureApimRequest = require('../lib/AzureApimRequest');
 
 async function getIndexingDetails() {
@@ -54,34 +53,4 @@ async function getIndexingDetails() {
   };
 }
 
-async function copyIndexDefinition(sourceIndexUrl, targetIndexUrl) {
-  const sourceIndexResponse = await azureSearchRequest(sourceIndexUrl, 'get');
-  if (sourceIndexResponse.statusCode === 200) {
-    const sourceIndexDefinition = sourceIndexResponse.body;
-    delete sourceIndexDefinition.name;
-    await azureSearchRequest(targetIndexUrl, 'delete');
-    await azureSearchRequest(targetIndexUrl, 'put', JSON.stringify(sourceIndexDefinition));
-  }
-  return 'created';
-}
-
-async function updateIndexerTargetIndex(idleIndexName) {
-  const searchHostname = process.env['search-hostname'];
-  const indexerName = process.env['search-indexer-name'];
-  const indexerUrl = `https://${searchHostname}/indexers/${indexerName}`;
-  const indexerResponse = await azureSearchRequest(indexerUrl, 'get');
-  if (indexerResponse.statusCode === 200) {
-    const indexerDefinition = indexerResponse.body;
-    indexerDefinition.targetIndexName = idleIndexName;
-    delete indexerDefinition.name;
-    await azureSearchRequest(indexerUrl, 'put', JSON.stringify(indexerDefinition));
-  }
-}
-
-module.exports = async function getIdleIndexUrl() {
-  const indexingDetails = await getIndexingDetails();
-  await copyIndexDefinition(indexingDetails.active.url, indexingDetails.idle.url);
-  await updateIndexerTargetIndex(indexingDetails.idle.name);
-
-  return indexingDetails.idle.url;
-};
+module.exports = getIndexingDetails;
