@@ -1,6 +1,6 @@
 const azureApimRequest = require('../lib/AzureApimRequest');
 
-module.exports = async function getIndexNames() {
+module.exports = async function getIndexNames(context, apimApiName) {
   function getIndexName(index, deployment) {
     return `${index.name}-${index.version}-${deployment}-${index.environment}`;
   }
@@ -16,7 +16,7 @@ module.exports = async function getIndexNames() {
     }
   }
 
-  const response = await azureApimRequest();
+  const response = await azureApimRequest(apimApiName);
 
   const activeServiceUrl = response.properties.serviceUrl;
 

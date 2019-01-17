@@ -1,7 +1,7 @@
 {
   "bindings": [
     {
-      "name": "idleIndexName",
+      "name": "parameters",
       "type": "activityTrigger",
       "direction": "in"
     }

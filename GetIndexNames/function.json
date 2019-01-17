@@ -1,7 +1,7 @@
 {
   "bindings": [
     {
-      "name": "name",
+      "name": "apimApiName",
       "type": "activityTrigger",
       "direction": "in"
     }

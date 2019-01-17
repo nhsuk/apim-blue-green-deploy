@@ -45,7 +45,7 @@ async function getIndexerName(indexNames) {
 
 module.exports = async function reindex(context) {
   const indexNames = context.bindings.indexNames;
-  const indexerName = await getIndexerName(indexNames.active);
+  const indexerName = await getIndexerName(indexNames);
   await copyIndexDefinition(indexNames.active, indexNames.idle);
   await updateIndexerTargetIndex(indexerName, indexNames.idle);
   await azureIndexersSearchRequest(`${indexerName}/run`, 'post');
