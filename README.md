@@ -26,23 +26,24 @@ Clone this repo and from within the top level directory run:
 ```
 func start
 ```
-## Run the orchestration function
+## Run the orchestration function (MacOS/Linux)
 ```
 # if a instance is already running then the following message will be displayed:
 #   "An instance with ID '123456789' is already running."
 curl -s -XPOST "http://localhost:7071/api/orchestrators/OrchestratorFunction/123456789" -d @body.json | tee response.json
 ```
-
+The function takes about 10 mins to run so the above call starts the function and uses `jq` to capture the Status Check URL.
 ```
 #the following command will get the status of the function
 curl $(jq -r '.statusQueryGetUri' response.json)
 ```
+Run the above command periodically to return the function status (typically it will be "inProgress" or "Completed").
 
-The function takes about 10 mins to run so the above call starts the function and uses `jq` to capture the Status Check URL.
+## Run the orchestration function (Windows)
 
-You can then run the above command periodically to check the status which will be "inProgress" or "Completed".
+_powershell samples here - TBC_
 
-Notes:
+## Notes
 1) The function is a [Durable Function](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-overview)
 which uses an [Orchestration Singleton Pattern](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-singletons).
 If you try and run the function while it is already running it will return an error (HTTP 409) 
