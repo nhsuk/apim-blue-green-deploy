@@ -26,20 +26,22 @@ Clone this repo and from within the top level directory run:
 ```
 func start
 ```
-## Run the orchestration function (MacOS/Linux)
+## Run the orchestration function
+
+### MacOS/Linux
 ```
 # if a instance is already running then the following message will be displayed:
 #   "An instance with ID '123456789' is already running."
 curl -s -XPOST "http://localhost:7071/api/orchestrators/OrchestratorFunction/123456789" -d @body.json | tee response.json
 ```
-The function takes about 10 mins to run so the above call starts the function and uses `jq` to capture the Status Check URL.
+The function takes about 10 mins to run so the above call return with a 202 after starting the function.
 ```
 #the following command will get the status of the function
 curl $(jq -r '.statusQueryGetUri' response.json)
 ```
-Run the above command periodically to return the function status (typically it will be "inProgress" or "Completed").
+The above command uses `jq` to query using the Status Check URL. Run it periodically to return the function status (typically it will be "inProgress" or "Completed").
 
-## Run the orchestration function (Windows)
+### Windows
 
 _powershell samples here - TBC_
 
