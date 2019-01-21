@@ -20,12 +20,16 @@ A `local.setting.json` file with the following values defined:
 |search-api-version|
 |search-api-admin-key|
 
+## Build locally
+
+Clone the repo and navigate to the top level directory
+Run `func extensions install`
+
 ## Start Azure Functions Locally
 
-Clone this repo and from within the top level directory run:
-```
-func start
-```
+Navigate to the top level directory
+Run `func start`
+
 ## Run the orchestration function
 
 ### MacOS/Linux
