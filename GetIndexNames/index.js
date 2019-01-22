@@ -1,8 +1,7 @@
 const azureApimRequest = require('../lib/AzureApimRequest');
+const utilities = require('../lib/utilities');
 
 module.exports = async function getIndexNames(context, apimApiName) {
-
-  const utilities = require('../lib/utilities');
   const response = await azureApimRequest(apimApiName);
 
   const activeServiceUrl = response.properties.serviceUrl;
@@ -28,7 +27,8 @@ module.exports = async function getIndexNames(context, apimApiName) {
     version: indexNameMatches[2],
   };
 
-  indexingDetails.idleDeployment = utilities.getIdleIndexDeployment(indexingDetails.activeDeployment);
+  indexingDetails.idleDeployment = utilities
+    .getIdleIndexDeployment(indexingDetails.activeDeployment);
 
   return {
     active: utilities.getIndexName(indexingDetails, indexingDetails.activeDeployment),

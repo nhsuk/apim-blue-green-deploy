@@ -13,6 +13,6 @@ describe('getIdleIndexName', () => {
     expect(idleIndexDeployment).to.be.equal('a');
   });
   it('it should throw error when passed a value which is neither \'a\' nor \'b\'', () => {
-    expect(function() {utilities.getIdleIndexDeployment('c')}).to.throw();
+    expect(() => { utilities.getIdleIndexDeployment('c'); }).to.throw();
   });
 });
