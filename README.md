@@ -14,9 +14,7 @@ for your development platform
 
 ## Run the Azure Functions locally
 
-* Start the Function app - `WEBSITE_HOSTNAME=localhost:7071 func start`.
-  Setting `WEBSITE_HOSTNAME` prevents an SSL error being reported when running
-  durable functions locally.
+* Start the Function app - `func start`
 
 ## Execute the orchestration function
 
@@ -38,10 +36,25 @@ The above command uses `jq` to query using the Status Check URL. Run it periodic
 _powershell samples here - TBC_
 
 ## Notes
-1) The function is a [Durable Function](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-overview)
-which uses an [Orchestration Singleton Pattern](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-singletons).
-If you try and run the function while it is already running it will return an error (HTTP 409) 
+1) The function is a
+[Durable Function](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-overview)
+which uses an
+[Orchestration Singleton Pattern](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-singletons).
+If you try and run the function while it is already running it will return an
+error (HTTP 409)
 
-2) The function also uses a [Monitoring Pattern](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-concepts#monitoring)
-to monitor the reindexing at 1 minute intervals using a [Timer Activity](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-timers).
-In theory this will reduce costs compared to using sleep or wait from within the function.
+2) The function also uses a
+[Monitoring Pattern](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-concepts#monitoring)
+to monitor the reindexing at 1 minute intervals using a
+[Timer Activity](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-timers).
+In theory this will reduce costs compared to using sleep or wait from within
+the function.
+
+
+## Troubleshooting
+
+* If an [EPROTO](https://github.com/Azure/azure-functions-durable-js/issues/28)
+  error is reported when running `func start` ensure the latest version of the
+  runtime and extensions are installed. Updating the runtime to the latest
+  version will depend on how it was originally installed as will upgrading the
+  function extensions.
