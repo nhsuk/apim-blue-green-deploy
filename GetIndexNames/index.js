@@ -1,21 +1,8 @@
 const azureApimRequest = require('../lib/AzureApimRequest');
 
 module.exports = async function getIndexNames(context, apimApiName) {
-  function getIndexName(index, deployment) {
-    return `${index.name}-${index.version}-${deployment}-${index.environment}`;
-  }
 
-  function getIdleIndexDeployment(activeDeployment) {
-    switch (activeDeployment) {
-      case 'a':
-        return 'b';
-      case 'b':
-        return 'a';
-      default:
-        throw new Error(`Argument Exception: unexpected activeDeployment value (${activeDeployment})`);
-    }
-  }
-
+  const utilities = require('../lib/utilities');
   const response = await azureApimRequest(apimApiName);
 
   const activeServiceUrl = response.properties.serviceUrl;
@@ -41,10 +28,10 @@ module.exports = async function getIndexNames(context, apimApiName) {
     version: indexNameMatches[2],
   };
 
-  indexingDetails.idleDeployment = getIdleIndexDeployment(indexingDetails.activeDeployment);
+  indexingDetails.idleDeployment = utilities.getIdleIndexDeployment(indexingDetails.activeDeployment);
 
   return {
-    active: getIndexName(indexingDetails, indexingDetails.activeDeployment),
-    idle: getIndexName(indexingDetails, indexingDetails.idleDeployment),
+    active: utilities.getIndexName(indexingDetails, indexingDetails.activeDeployment),
+    idle: utilities.getIndexName(indexingDetails, indexingDetails.idleDeployment),
   };
 };

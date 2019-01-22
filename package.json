@@ -13,11 +13,13 @@
     "request-promise-native": "^1.0.5"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
     "eslint": "^5.12.0",
-    "eslint-config-nhsuk": "^0.16.0"
+    "eslint-config-nhsuk": "^0.16.0",
+    "mocha": "^5.2.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "NODE_ENV=test mocha --exit --recursive test",
     "lint": "eslint"
   },
   "author": "Neil McLaughlin",
