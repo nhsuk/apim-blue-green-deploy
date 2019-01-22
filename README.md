@@ -1,36 +1,24 @@
-# index-switch
+# Azure API Manager Blue Green Deploy Function App
 
-## Prerequisites
+## Installation
 
-azure-functions-core-tools (install using `npm install -g azure-functions-core-tools`)
+* Install
+[Azure Functions Core Tools version 2.x](https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local#install-the-azure-functions-core-tools)
+for your development platform
+* Clone the repository - `git clone https://github.com/nhsuk/apim-blue-green-deploy.git`
+* Install npm dependencies - `npm install`
+* Rename [example.local.settings.json](example.local.settings.json) to
+  [local.settings.json](local.settings.json) and edit the file to include valid
+  values
+* Install Function Runtime extensions - `func extensions install`
 
-A `local.setting.json` file with the following values defined:
+## Run the Azure Functions locally
 
-|Environment Variables|
-|---------------------|
-|AzureWebJobsStorage|
-|FUNCTIONS_WORKER_RUNTIME|
-|apim-authorization-token|
-|apim-api-version|
-|apim-host-name|
-|apim-subscription|
-|apim-resource-group|
-|apim-api-name|
-|search-hostname|
-|search-api-version|
-|search-api-admin-key|
+* Start the Function app - `WEBSITE_HOSTNAME=localhost:7071 func start`.
+  Setting `WEBSITE_HOSTNAME` prevents an SSL error being reported when running
+  durable functions locally.
 
-## Build locally
-
-Clone the repo and navigate to the top level directory
-Run `func extensions install`
-
-## Start Azure Functions Locally
-
-Navigate to the top level directory
-Run `func start`
-
-## Run the orchestration function
+## Execute the orchestration function
 
 ### MacOS/Linux
 ```
