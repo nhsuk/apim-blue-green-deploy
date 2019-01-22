@@ -20,7 +20,7 @@
   },
   "scripts": {
     "test": "NODE_ENV=test mocha --exit --recursive test",
-    "lint": "eslint"
+    "lint": "eslint ."
   },
   "author": "Neil McLaughlin",
   "license": "MIT"
