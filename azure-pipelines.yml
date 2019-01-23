@@ -21,4 +21,4 @@ steps:
     displayName: 'Publish Artifacts'
     inputs:
       artifactName: 'drop'
-      pathtoPublish: '$(System.DefaultWorkingDirectory)'
+      pathtoPublish: '$(System.DefaultWorkingDirectory)/$(Build.BuildId).zip'
