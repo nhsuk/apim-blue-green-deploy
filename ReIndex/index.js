@@ -8,14 +8,9 @@ async function azureIndexersSearchRequest(indexerName, method, body) {
   return azureSearchRequest(`indexers/${indexerName}`, method, body);
 }
 
-async function copyIndexDefinition(sourceIndexName, targetIndexName) {
-  const sourceIndexResponse = await azureIndexesSearchRequest(sourceIndexName, 'get');
-  if (sourceIndexResponse.statusCode === 200) {
-    const sourceIndexDefinition = sourceIndexResponse.body;
-    delete sourceIndexDefinition.name;
-    await azureIndexesSearchRequest(targetIndexName, 'delete');
-    await azureIndexesSearchRequest(targetIndexName, 'put', JSON.stringify(sourceIndexDefinition));
-  }
+async function recreateIndex(indexName, indexDefinition) {
+  await azureIndexesSearchRequest(indexName, 'delete');
+  await azureIndexesSearchRequest(indexName, 'put', JSON.stringify(indexDefinition));
   return 'created';
 }
 
@@ -44,9 +39,10 @@ async function getIndexerName(indexNames) {
 }
 
 module.exports = async function reindex(context) {
-  const indexNames = context.bindings.indexNames;
+  const indexNames = context.bindings.parameters.indexNames;
+  const indexDefinition = context.bindings.parameters.indexDefinition;
   const indexerName = await getIndexerName(indexNames);
-  await copyIndexDefinition(indexNames.active, indexNames.idle);
+  await recreateIndex(indexNames.idle, indexDefinition);
   await updateIndexerTargetIndex(indexerName, indexNames.idle);
   await azureIndexersSearchRequest(`${indexerName}/run`, 'post');
 

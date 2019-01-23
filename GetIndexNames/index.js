@@ -2,9 +2,11 @@ const azureApimRequest = require('../lib/AzureApimRequest');
 const utilities = require('../lib/utilities');
 
 module.exports = async function getIndexNames(context, apimApiName) {
+  context.log({ apimApiName });
   const response = await azureApimRequest(apimApiName);
 
   const activeServiceUrl = response.properties.serviceUrl;
+  context.log({ activeServiceUrl });
 
   const urlRegex = /https:\/\/.*\/indexes\/(.*)\/docs\/$/;
   const indexNameRegex = /(.*)-([0-9]+-[0-9]+)-(a|b)-(dev|int|prod)/;
