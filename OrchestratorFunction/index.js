@@ -6,13 +6,23 @@ module.exports = df.orchestrator(function* orchestratorFunctionGenerator(context
   const input = context.df.getInput();
 
   context.log({ input });
+
+  const apimApiName = input.parameters.apimApiName;
+  let indexDefinition = input.parameters.indexDefinition;
+
   context.log('Starting Orchestration using Chaining and Monitor patterns');
 
-  const indexNames = yield context.df.callActivity('GetIndexNames', input.apimApiName);
+  const indexNames = yield context.df.callActivity('GetIndexNames', apimApiName);
   context.log({ indexNames });
 
-  const indexerName = yield context.df.callActivity('ReIndex', indexNames);
+  if (!indexDefinition) {
+    indexDefinition = yield context.df.callActivity('GetIndexDefinition', indexNames.active);
+    context.log(indexDefinition);
+  }
+
+  const indexerName = yield context.df.callActivity('ReIndex', { indexDefinition, indexNames });
   context.log({ indexerName });
+
   const polling = { interval: 60, units: 'seconds' };
   const expiryTime = moment().add(polling.interval * 15, polling.units);
 
@@ -26,11 +36,7 @@ module.exports = df.orchestrator(function* orchestratorFunctionGenerator(context
     const indexerStatus = yield context.df.callActivity('GetIndexerStatus', indexerName);
     context.log({ indexerStatus });
     if (indexerStatus === 'success') {
-      const parameters = {
-        apimApiName: input.apimApiName,
-        idleIndexName: indexNames.idle,
-      };
-      yield context.df.callActivity('SwitchAliasedIndex', parameters);
+      yield context.df.callActivity('SwitchAliasedIndex', { apimApiName, idleIndexName: indexNames.idle });
       // TODO: send notification
       return 'done';
     } if (indexerStatus !== 'inProgress') {
