@@ -19,7 +19,7 @@
     "mocha": "^5.2.0"
   },
   "scripts": {
-    "test": "NODE_ENV=test mocha --exit --recursive test",
+    "test": "mocha --exit --recursive test",
     "lint": "eslint ."
   },
   "author": "Neil McLaughlin",
