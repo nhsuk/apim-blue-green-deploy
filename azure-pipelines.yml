@@ -10,6 +10,9 @@ steps:
   - script: npm install
     displayName: 'npm install'
 
+  - script: func extensions install
+    displayName: 'func extensions install'
+
   - task: ArchiveFiles@2
     displayName: 'Archive Function App'
     inputs:
