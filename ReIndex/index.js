@@ -30,7 +30,7 @@ async function getIndexerName(indexNames) {
   // and left the indexer pointing at the idle index
   const indexersResponse = await azureIndexersSearchRequest('', 'get');
   const indexers = indexersResponse.body.value
-    .filter(i => [indexNames.active, indexNames.idle].includes(i.name));
+    .filter(i => [indexNames.active, indexNames.idle].includes(i.targetIndexName));
   if (indexers.length !== 1) {
     const errMsg = `Expected to find exactly one indexer for the indexes ${indexNames} (found ${indexers.length})`;
     throw Error(errMsg);
