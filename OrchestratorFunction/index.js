@@ -26,6 +26,7 @@ module.exports = df.orchestrator(function* orchestratorFunctionGenerator(context
     { parameters },
     `${context.df.instanceId}:0`
   );
+  context.log({ returnStatus });
 
   return returnStatus;
 });
