@@ -14,7 +14,7 @@ module.exports = df.orchestrator(function* orchestratorFunctionGenerator(context
   if (!indexDefinition) {
     indexDefinition = yield context.df.callActivity('GetIndexDefinition', indexNames.active);
   }
-  context.log(indexDefinition);
+  context.log({ indexDefinition });
 
   const indexerName = yield context.df.callActivity('ReIndex', { indexDefinition, indexNames });
   context.log({ indexerName });
