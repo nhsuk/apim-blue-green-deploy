@@ -27,10 +27,10 @@ curl -s -XPOST "http://localhost:7071/api/orchestrators/OrchestratorFunction/123
 curl -s -XPOST "http://localhost:7071/api/orchestrators/OrchestratorFunction/123456789" -d @samples/body-with-index-definition.json | tee response.json
 
 #Run the suborchestration to get the idle/active index names
-curl -s -XPOST "http://localhost:7071/api/orchestrators/GetIndexNamesOrchestrator/1" -d 'service-search-organisations-2' | tee ../response.json
+curl -s -XPOST "http://localhost:7071/api/orchestrators/GetIndexNamesOrchestrator/1" -d 'service-search-organisations-2' | tee response.json
 
 #Run the suborchestration to reindex the idle index and make it active
-curl -s -XPOST "http://localhost:7071/api/orchestrators/ReIndexOrchestrator/1" -d @samples/body-reindex.json | tee ../response.json
+curl -s -XPOST "http://localhost:7071/api/orchestrators/ReIndexOrchestrator/1" -d @samples/body-reindex.json | tee response.json
 
 ```
 The function takes about 10 mins to run so the above call return with a 202 after starting the function. If an instance
