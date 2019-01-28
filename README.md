@@ -27,19 +27,22 @@ curl -s -XPOST "http://localhost:7071/api/orchestrators/OrchestratorFunction/123
 curl -s -XPOST "http://localhost:7071/api/orchestrators/OrchestratorFunction/123456789" -d @samples/body-with-index-definition.json | tee response.json
 
 #Run the suborchestration to get the idle/active index names
-curl -s -XPOST "http://localhost:7071/api/orchestrators/GetIndexNamesOrchestrator/1" -d 'service-search-organisations-2' | tee ../response.json
+curl -s -XPOST "http://localhost:7071/api/orchestrators/GetIndexNamesOrchestrator/1" -d 'service-search-organisations-2' | tee response.json
 
 #Run the suborchestration to reindex the idle index and make it active
-curl -s -XPOST "http://localhost:7071/api/orchestrators/ReIndexOrchestrator/1" -d @samples/body-reindex.json | tee ../response.json
+curl -s -XPOST "http://localhost:7071/api/orchestrators/ReIndexOrchestrator/1" -d @samples/body-reindex.json | tee response.json
 
 ```
-The function takes about 10 mins to run so the above call return with a 202 after starting the function. If an instance
-with ID '123456789' is already running then a 409 error will be returned.
+The function takes about 10 mins to run so the above call return with a 202
+after starting the function. If an instance with ID '123456789' is already
+running then a 409 error will be returned.
 ```
 #the following command will get the status of the function
 curl $(jq -r '.statusQueryGetUri' response.json)
 ```
-The above command uses `jq` to query using the Status Check URL. Run it periodically to return the function status (typically it will be "inProgress" or "Completed").
+The above command uses `jq` to query using the Status Check URL. Run it
+periodically to return the function status (typically it will be "inProgress"
+or "Completed").
 
 ### Windows
 
