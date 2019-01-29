@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "durable-functions": "^1.1.4",
+    "husky": "^1.3.1",
     "moment": "^2.24.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5"
@@ -18,9 +19,16 @@
     "eslint-config-nhsuk": "^0.16.0",
     "mocha": "^5.2.0"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run git-hook",
+      "pre-push": "npm run git-hook"
+    }
+  },
   "scripts": {
-    "test": "mocha --exit --recursive test",
-    "lint": "eslint ."
+    "git-hook": "npm run lint && npm run test",
+    "lint": "eslint --ext .js,.json .",
+    "test": "mocha --exit --recursive test"
   },
   "author": "Neil McLaughlin",
   "license": "MIT"
