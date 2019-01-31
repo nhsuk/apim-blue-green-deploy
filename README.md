@@ -63,7 +63,6 @@ to monitor the reindexing at 1 minute intervals using a
 In theory this will reduce costs compared to using sleep or wait from within
 the function.
 
-
 ## Troubleshooting
 
 * If an [EPROTO](https://github.com/Azure/azure-functions-durable-js/issues/28)
