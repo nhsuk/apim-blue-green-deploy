@@ -17,6 +17,7 @@
     "chai": "^4.2.0",
     "eslint": "^5.12.1",
     "eslint-config-nhsuk": "^0.16.0",
+    "istanbul": "^0.4.5",
     "mocha": "^5.2.0"
   },
   "husky": {
@@ -26,7 +27,10 @@
     }
   },
   "scripts": {
-    "git-hook": "npm run lint && npm run test",
+    "code-coverage": "npm run code-coverage-generate && npm run code-coverage-check",
+    "code-coverage-check": "./node_modules/istanbul/lib/cli.js check-coverage --config .istanbul.yml",
+    "code-coverage-generate": "./node_modules/istanbul/lib/cli.js cover _mocha -- --exit --recursive",
+    "git-hook": "npm run lint && npm run code-coverage",
     "lint": "eslint --ext .js,.json .",
     "test": "mocha --exit --recursive test"
   },
