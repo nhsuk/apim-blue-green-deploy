@@ -29,7 +29,7 @@
   "scripts": {
     "code-coverage": "npm run code-coverage-generate && npm run code-coverage-check",
     "code-coverage-check": "./node_modules/istanbul/lib/cli.js check-coverage --config .istanbul.yml",
-    "code-coverage-generate": "./node_modules/istanbul/lib/cli.js cover _mocha -- --exit --recursive",
+    "code-coverage-generate": "./node_modules/istanbul/lib/cli.js cover --report cobertura _mocha -- --exit --recursive",
     "git-hook": "npm run lint && npm run code-coverage",
     "lint": "eslint --ext .js,.json .",
     "test": "mocha --exit --recursive test"

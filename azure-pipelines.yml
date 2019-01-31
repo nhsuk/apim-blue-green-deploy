@@ -14,8 +14,14 @@ steps:
   - script: npm run lint
     displayName: 'npm run lint'
 
-  - script: npm run test
-    displayName: 'npm run test'
+  - script: npm run code-coverage
+    displayName: 'npm run code-coverage'
+
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/*coverage.xml'
+      reportDirectory: '$(System.DefaultWorkingDirectory)/**/coverage'
 
   - task: ArchiveFiles@2
     displayName: 'Archive Function App'
