@@ -11,6 +11,8 @@ Publish
 *.Cache
 project.lock.json
 
+.DS_Store
+
 /packages
 /TestResults
 
@@ -25,3 +27,5 @@ response.json
 
 node_modules
 coverage/
+.nyc_output/
+test-report.html

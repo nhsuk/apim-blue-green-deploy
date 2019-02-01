@@ -17,8 +17,8 @@
     "chai": "^4.2.0",
     "eslint": "^5.12.1",
     "eslint-config-nhsuk": "^0.16.0",
-    "istanbul": "^0.4.5",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0"
   },
   "husky": {
     "hooks": {
@@ -27,12 +27,10 @@
     }
   },
   "scripts": {
-    "code-coverage": "npm run code-coverage-generate && npm run code-coverage-check",
-    "code-coverage-check": "./node_modules/istanbul/lib/cli.js check-coverage --config .istanbul.yml",
-    "code-coverage-generate": "./node_modules/istanbul/lib/cli.js cover --report cobertura _mocha -- --exit --recursive",
-    "git-hook": "npm run lint && npm run code-coverage",
+    "git-hook": "npm run lint && npm run test",
     "lint": "eslint --ext .js,.json .",
-    "test": "mocha --exit --recursive test"
+    "test": "nyc mocha --exit --recursive test",
+    "test-ci": "nyc --reporter=html --reporter=cobertura mocha --exit --recursive test --reporter doc > test-report.html"
   },
   "author": "Neil McLaughlin",
   "license": "MIT"
