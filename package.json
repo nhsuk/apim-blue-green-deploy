@@ -18,6 +18,7 @@
     "eslint": "^5.12.1",
     "eslint-config-nhsuk": "^0.16.0",
     "mocha": "^5.2.0",
+    "mocha-junit-reporter": "^1.18.0",
     "nyc": "^13.1.0"
   },
   "husky": {
@@ -30,7 +31,7 @@
     "git-hook": "npm run lint && npm run test",
     "lint": "eslint --ext .js,.json .",
     "test": "nyc mocha --exit --recursive test",
-    "test-ci": "nyc --reporter=html --reporter=cobertura mocha --exit --recursive test --reporter doc > test-report.html"
+    "test-ci": "nyc --reporter=html --reporter=cobertura mocha --exit --recursive test --reporter mocha-junit-reporter"
   },
   "author": "Neil McLaughlin",
   "license": "MIT"

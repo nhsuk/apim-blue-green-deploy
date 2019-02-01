@@ -14,14 +14,20 @@ steps:
   - script: npm run lint
     displayName: 'npm run lint'
 
-  - script: npm run test
-    displayName: 'npm run test'
+  - script: npm run test-ci
+    displayName: 'npm run test-ci'
 
   - task: PublishCodeCoverageResults@1
     inputs:
       codeCoverageTool: Cobertura
-      summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/cobertura-coverage.xml'
-      reportDirectory: '$(System.DefaultWorkingDirectory)/**/coverage'
+      summaryFileLocation: '$(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml'
+      reportDirectory: '$(System.DefaultWorkingDirectory)/coverage'
+
+  - task: PublishTestResults@2
+    condition: succeededOrFailed()
+    inputs:
+      testRunner: JUnit
+      testResultsFiles: '$(System.DefaultWorkingDirectory)/test-results.xml'
 
   - task: ArchiveFiles@2
     displayName: 'Archive Function App'
