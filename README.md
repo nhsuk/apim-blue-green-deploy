@@ -18,6 +18,15 @@ for your development platform
 
 ## Execute the orchestration function(s)
 
+The functions require an
+[authorization key](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-http-webhook#authorization-keys)
+to be included within the request. The keys can be obtained from the
+[portal](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-http-webhook#obtaining-keys)
+and are easy to use. Either through a
+[query string parameter or a header](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-http-webhook#obtaining-keys).
+
+No authorization is required when the function is running locally.
+
 ### MacOS/Linux
 ```
 #The whole orchestration (idle index definition copied from the active index)
@@ -33,16 +42,20 @@ curl -s -XPOST "http://localhost:7071/api/orchestrators/GetIndexNamesOrchestrato
 curl -s -XPOST "http://localhost:7071/api/orchestrators/ReIndexOrchestrator/1" -d @samples/body-reindex.json | tee response.json
 
 ```
-The function takes about 10 mins to run so the above call return with a 202
-after starting the function. If an instance with ID '123456789' is already
-running then a 409 error will be returned.
+The full orchestration takes ~10 mins to complete. The initial request to the
+function returns a 202 response, if successful.
+If an instance with ID '123456789' is already running a 409 response will be
+returned.
+The 202 response contains a `statusQueryGetUri` (also available in the
+`location` header). This URI can be used to monitor the status of the function.
+If one of the commands above has been run and
+[jq](https://stedolan.github.io/jq/) is available within the environment, the
+following command can be run in order to check the status.
 ```
-#the following command will get the status of the function
 curl $(jq -r '.statusQueryGetUri' response.json)
 ```
-The above command uses `jq` to query using the Status Check URL. Run it
-periodically to return the function status (typically it will be "inProgress"
-or "Completed").
+Run it periodically to return the function status (typically it will be
+"inProgress" or "Completed").
 
 ### Windows
 
