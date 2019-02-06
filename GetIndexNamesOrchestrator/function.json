@@ -3,7 +3,8 @@
     {
       "name": "context",
       "type": "orchestrationTrigger",
-      "direction": "in"
+      "direction": "in",
+      "authLevel": "function"
     }
   ]
 }

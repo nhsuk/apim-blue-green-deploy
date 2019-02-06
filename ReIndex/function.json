@@ -3,7 +3,8 @@
     {
       "name": "parameters",
       "type": "activityTrigger",
-      "direction": "in"
+      "direction": "in",
+      "authLevel": "function"
     }
   ]
 }
