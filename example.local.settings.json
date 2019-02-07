@@ -6,12 +6,9 @@
     "apim-authorization-token": "",
     "apim-api-version": "",
     "apim-host-name": "",
-    "apim-service-name": "",
     "apim-subscription": "",
     "apim-resource-group": "",
-    "apim-api-name": "",
     "search-hostname": "",
-    "search-indexer-name": "",
     "search-api-version": "",
     "search-api-admin-key": ""
   }
