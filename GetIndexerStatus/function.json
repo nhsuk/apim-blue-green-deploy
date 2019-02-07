@@ -3,8 +3,7 @@
     {
       "name": "indexerName",
       "type": "activityTrigger",
-      "direction": "in",
-      "authLevel": "function"
+      "direction": "in"
     }
   ]
 }
