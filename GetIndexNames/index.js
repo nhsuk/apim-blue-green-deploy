@@ -9,7 +9,7 @@ module.exports = async function getIndexNames(context, apimApiName) {
   context.log({ activeServiceUrl });
 
   const urlRegex = /https:\/\/.*\/indexes\/(.*)\/docs\/$/;
-  const indexNameRegex = /(.*)-([0-9]+-[0-9]+)-(a|b)-(dev|int|prod)/;
+  const indexNameRegex = /(.*)-([0-9]+-[0-9]+)-(a|b)-(dev|int|stag|prod)/;
 
   const urlMatches = activeServiceUrl.match(urlRegex);
   if (!urlMatches) {
