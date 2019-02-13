@@ -32,9 +32,6 @@ No authorization is required when the function is running locally.
 #The whole orchestration (idle index definition copied from the active index)
 curl -s -XPOST "http://localhost:7071/api/orchestrators/OrchestratorFunction/123456789" -d @samples/body.json | tee response.json
 
-#The whole orchestration (idle index definition passed in)
-curl -s -XPOST "http://localhost:7071/api/orchestrators/OrchestratorFunction/123456789" -d @samples/body-with-index-definition.json | tee response.json
-
 #Run the suborchestration to get the idle/active index names
 curl -s -XPOST "http://localhost:7071/api/orchestrators/GetIndexNamesOrchestrator/1" -d 'service-search-organisations-2' | tee response.json
 
