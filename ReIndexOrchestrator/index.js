@@ -11,13 +11,16 @@ module.exports = df.orchestrator(function* orchestratorFunctionGenerator(context
   const apimApiName = input.parameters.apimApiName;
   let indexDefinition = input.parameters.indexDefinition;
 
+  // Because of the naming convention which applies the same name to the indexer and data source
+  // as for the index we can do this
+  const indexerName = indexNames.idle;
+
   if (!indexDefinition) {
     indexDefinition = yield context.df.callActivity('GetIndexDefinition', indexNames.active);
   }
   context.log({ indexDefinition });
 
-  const indexerName = yield context.df.callActivity('ReIndex', { indexDefinition, indexNames });
-  context.log({ indexerName });
+  yield context.df.callActivity('ReIndex', { indexDefinition, indexNames });
 
   const polling = { interval: 60, units: 'seconds' };
   const expiryTime = moment().add(polling.interval * 15, polling.units);
