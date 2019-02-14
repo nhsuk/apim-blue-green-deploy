@@ -3,13 +3,14 @@
   "Values": {
     "AzureWebJobsStorage": "",
     "FUNCTIONS_WORKER_RUNTIME": "node",
-    "apim-authorization-token": "",
+    "apim-api-identifier": "",
+    "apim-api-key": "",
     "apim-api-version": "",
     "apim-host-name": "",
-    "apim-subscription": "",
     "apim-resource-group": "",
-    "search-hostname": "",
+    "apim-subscription": "",
+    "search-api-admin-key": "",
     "search-api-version": "",
-    "search-api-admin-key": ""
+    "search-hostname": ""
   }
 }
