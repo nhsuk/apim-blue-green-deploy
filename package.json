@@ -31,7 +31,8 @@
     "git-hook": "npm run lint && npm run test",
     "lint": "eslint --ext .js,.json .",
     "test": "nyc mocha --exit --recursive test",
-    "test-ci": "nyc --reporter=html --reporter=cobertura mocha --exit --recursive test --reporter mocha-junit-reporter"
+    "test-ci": "nyc --reporter=html --reporter=cobertura mocha --exit --recursive test --reporter mocha-junit-reporter",
+    "test-watch": "npm run test -- --watch --reporter min"
   },
   "author": "Neil McLaughlin",
   "license": "MIT"
