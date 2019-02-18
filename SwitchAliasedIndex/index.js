@@ -8,7 +8,5 @@ module.exports = async function switchAliasedIndex(context) {
   const serviceUrl = azureSearchUrl(`indexes/${idleIndexName}/docs/`);
   context.log({ serviceUrl });
   apiDefinition.properties.serviceUrl = serviceUrl;
-  const response = await azureApimRequest(apimApiName, 'put', JSON.stringify(apiDefinition));
-  context.log({ response });
-  return 'switched';
+  await azureApimRequest(apimApiName, 'put', JSON.stringify(apiDefinition));
 };
