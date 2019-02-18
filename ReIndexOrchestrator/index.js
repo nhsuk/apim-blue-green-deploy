@@ -21,7 +21,7 @@ module.exports = df.orchestrator(function* orchestratorFunctionGenerator(context
   const indexDefinition = yield context.df.callActivity('GetIndexDefinition', indexNames.active);
   context.log({ indexDefinition });
 
-  yield context.df.callActivity('ReIndex', { indexDefinition, indexNames });
+  yield context.df.callActivity('ReIndex', { indexDefinition, indexName: indexNames.idle });
 
   const polling = { interval: 60, units: 'seconds' };
   const expiryTime = moment().add(polling.interval * 15, polling.units);
