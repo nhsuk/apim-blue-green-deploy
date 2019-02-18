@@ -45,7 +45,6 @@ describe('GetIndexNamesOrchestrator', () => {
     const mockContext = new MockContextClass({
       context: new classes.DurableOrchestrationBindingInfo(
         GetOrchestratorStart('GetIndexNames', moment.utc().toDate())
-
       ),
     });
     orchestrator(mockContext);

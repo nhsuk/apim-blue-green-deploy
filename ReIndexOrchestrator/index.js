@@ -37,12 +37,12 @@ module.exports = df.orchestrator(function* orchestratorFunctionGenerator(context
     context.log({ indexerStatus });
     if (indexerStatus === 'success') {
       yield context.df.callActivity('SwitchAliasedIndex', { apimApiName, idleIndexName: indexNames.idle });
-      // TODO: send notification
       return 'done';
-    } if (indexerStatus !== 'inProgress') {
-      return 'failed: indexer failed';
+    }
+    if (indexerStatus !== 'inProgress') {
+      throw new Error(`reindexing failed: indexerStatus=${indexerStatus}`);
     }
   }
 
-  return 'failed: OrchestratorFunction/index.js timed out';
+  throw new Error('reindexing failed: timed out');
 });
