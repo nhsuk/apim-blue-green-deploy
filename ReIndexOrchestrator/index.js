@@ -15,7 +15,7 @@ module.exports = df.orchestrator(function* orchestratorFunctionGenerator(context
   const indexerName = indexNames.idle;
 
   if (yield context.df.callActivity('GetIndexerStatus', indexerName) === 'inProgress') {
-    return 'failed: indexer currently running';
+    throw new Error(`reindexing failed: indexer ${indexerName} is currently running`);
   }
 
   const indexDefinition = yield context.df.callActivity('GetIndexDefinition', indexNames.active);
