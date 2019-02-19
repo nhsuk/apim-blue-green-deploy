@@ -41,8 +41,6 @@ curl -s -XPOST "http://localhost:7071/api/orchestrators/ReIndexOrchestrator" -d 
 ```
 The full orchestration takes ~10 mins to complete. The initial request to the
 function returns a 202 response, if successful.
-If an instance with ID '123456789' is already running a 409 response will be
-returned.
 The 202 response contains a `statusQueryGetUri` (also available in the
 `location` header). This URI can be used to monitor the status of the function.
 If one of the commands above has been run and

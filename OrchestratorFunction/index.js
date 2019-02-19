@@ -8,22 +8,14 @@ module.exports = df.orchestrator(function* orchestratorFunctionGenerator(context
 
   context.log('Starting Orchestration using Chaining and Monitor patterns');
 
-  const indexNames = yield context.df.callSubOrchestrator(
-    'GetIndexNamesOrchestrator',
-    apimApiName,
-    `${context.df.instanceId}:0`
-  );
+  const indexNames = yield context.df.callSubOrchestrator('GetIndexNamesOrchestrator', apimApiName);
   context.log({ indexNames });
 
   const parameters = {
     apimApiName,
     indexNames,
   };
-  const returnStatus = yield context.df.callSubOrchestrator(
-    'ReIndexOrchestrator',
-    { parameters },
-    `${context.df.instanceId}:0`
-  );
+  const returnStatus = yield context.df.callSubOrchestrator('ReIndexOrchestrator', { parameters });
   context.log({ returnStatus });
 
   return returnStatus;
