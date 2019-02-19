@@ -14,6 +14,10 @@ module.exports = df.orchestrator(function* orchestratorFunctionGenerator(context
   // as for the index we can do this
   const indexerName = indexNames.idle;
 
+  if (yield context.df.callActivity('GetIndexerStatus', indexerName) === 'inProgress') {
+    return 'failed: indexer currently running';
+  }
+
   const indexDefinition = yield context.df.callActivity('GetIndexDefinition', indexNames.active);
   context.log({ indexDefinition });
 
