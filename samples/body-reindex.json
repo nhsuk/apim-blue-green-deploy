@@ -1,9 +1,0 @@
-{
-  "parameters": { 
-    "apimApiName": "service-search-organisations",
-    "indexNames": {
-      "idle": "organisationlookup-2-0-a-dev",
-      "active": "organisationlookup-2-0-b-dev"
-    }
-  }
-}

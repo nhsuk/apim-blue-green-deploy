@@ -30,14 +30,7 @@ No authorization is required when the function is running locally.
 ### MacOS/Linux
 ```
 #The whole orchestration (idle index definition copied from the active index)
-curl -s -XPOST "http://localhost:7071/api/orchestrators/OrchestratorFunction" -d @samples/body.json | tee response.json
-
-#Run the suborchestration to get the idle/active index names
-curl -s -XPOST "http://localhost:7071/api/orchestrators/GetIndexNamesOrchestrator" -d 'service-search-organisations-2' | tee response.json
-
-#Run the suborchestration to reindex the idle index and make it active
-curl -s -XPOST "http://localhost:7071/api/orchestrators/ReIndexOrchestrator" -d @samples/body-reindex.json | tee response.json
-
+curl -s -XPOST "http://localhost:7071/api/orchestrators/BlueGreenDeploymentOrchestrator" -d @samples/body.json | tee response.json
 ```
 The full orchestration takes ~10 mins to complete. The initial request to the
 function returns a 202 response, if successful.
