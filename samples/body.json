@@ -1,5 +1,3 @@
 {
-  "parameters": { 
-    "apimApiName": "service-search-organisations"
-  }
+  "apimApiName": "service-search-organisations"
 }
