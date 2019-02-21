@@ -11,6 +11,7 @@
     "apim-subscription": "",
     "search-api-admin-key": "",
     "search-api-version": "",
-    "search-hostname": ""
+    "search-hostname": "",
+    "task-hub-name": "localdevtaskhub"
   }
 }

@@ -9,6 +9,9 @@ echo "PR_NUMBER: '$PR_NUMBER'."
 APP_NAME=nhsuk-apim-blue-green-deploy-func-dev-ne-PR-${PR_NUMBER}
 echo "APP_NAME: '$APP_NAME'."
 
+TASK_HUB_NAME="${TASK_HUB_NAME}${PR_NUMBER}"
+echo "TASK_HUB_NAME: '$TASK_HUB_NAME'."
 # Set APP_NAME for use in down stream tasks
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/release/variables?view=azdevops&tabs=shell#set-in-script
 echo "##vso[task.setvariable variable=APP_NAME]$APP_NAME"
+echo "##vso[task.setvariable variable=TASK_HUB_NAME]$TASK_HUB_NAME"
