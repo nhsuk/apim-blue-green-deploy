@@ -1,20 +1,8 @@
 const azureSearchRequest = require('../lib/AzureSearchRequest');
 
-async function azureIndexesSearchRequest(indexName, method, body) {
-  azureSearchRequest(`indexes/${indexName}`, method, body);
-}
-
-async function azureIndexersSearchRequest(indexerName, method, body) {
-  azureSearchRequest(`indexers/${indexerName}`, method, body);
-}
-
-async function recreateIndex(indexName, indexDefinition) {
-  await azureIndexesSearchRequest(indexName, 'put', JSON.stringify(indexDefinition));
-}
-
 module.exports = async function reindex(context) {
-  const indexNames = context.bindings.parameters.indexNames;
+  const indexName = context.bindings.parameters.indexName;
   const indexDefinition = context.bindings.parameters.indexDefinition;
-  await recreateIndex(indexNames.idle, indexDefinition);
-  await azureIndexersSearchRequest(`${indexNames.idle}/run`, 'post');
+  await azureSearchRequest(`indexes/${indexName}`, 'put', JSON.stringify(indexDefinition));
+  await azureSearchRequest(`indexers/${indexName}/run`, 'post');
 };
