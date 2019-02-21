@@ -10,18 +10,24 @@ describe('parseServiceUrl', () => {
       expect(indexDetals.active).to.be.equal('organisationlookup-2-0-a-dev');
       expect(indexDetals.idle).to.be.equal('organisationlookup-2-0-b-dev');
     });
+
     it('it should handle active index \'b\'', () => {
       const indexDetals = parseServiceUrl('https://hostname/indexes/organisationlookup-2-0-b-dev/docs/');
       expect(indexDetals.active).to.be.equal('organisationlookup-2-0-b-dev');
       expect(indexDetals.idle).to.be.equal('organisationlookup-2-0-a-dev');
     });
   });
+
   describe('invalid urls', () => {
     it('it should throw when not able to parse url', () => {
-      expect(() => { parseServiceUrl('https://hostname/blah'); }).to.throw;
+      const serviceUrl = 'https://hostname/blah';
+      expect(() => { parseServiceUrl(serviceUrl); }).to.throw(`The URL (${serviceUrl}) is not in a recognised format.`);
     });
+
     it('it should throw when not able to parse index name', () => {
-      expect(() => { parseServiceUrl('https://hostname/indexes/organisationlookup-dev/docs/'); }).to.throw;
+      const indexName = 'somethingsomething-dev';
+      const serviceUrl = `https://hostname/indexes/${indexName}/docs/`;
+      expect(() => { parseServiceUrl(serviceUrl); }).to.throw(`The index name (${indexName}) is not in a recognised format.`);
     });
   });
 });
