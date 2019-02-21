@@ -5,7 +5,7 @@ module.exports = df.orchestrator(function* orchestratorFunctionGenerator(context
   const input = context.df.getInput();
   context.log({ input });
 
-  const apimApiName = input.parameters.apimApiName;
+  const apimApiName = input.apimApiName;
 
   context.log('Starting Orchestration using Chaining and Monitor patterns');
 
