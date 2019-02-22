@@ -52,17 +52,11 @@ _powershell samples here - TBC_
 ## Notes
 1) The function is a
 [Durable Function](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-overview)
-which uses an
-[Orchestration Singleton Pattern](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-singletons).
-If you try and run the function while it is already running it will return an
-error (HTTP 409)
-
-2) The function also uses a
+which uses the 
 [Monitoring Pattern](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-concepts#monitoring)
 to monitor the reindexing at 1 minute intervals using a
 [Timer Activity](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-timers).
-In theory this will reduce costs compared to using sleep or wait from within
-the function.
+2) If you try to run the function while the indexer is already running then a HTTP 500 error will be returned.
 
 ## Troubleshooting
 
