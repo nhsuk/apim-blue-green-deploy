@@ -2,7 +2,6 @@ const chai = require('chai');
 const nock = require('nock');
 const errors = require('request-promise-native/errors');
 const chaiAsPromised = require('chai-as-promised');
-const localSettings = require('../../local.settings.json');
 const getIndexNames = require('../../GetIndexNames/index');
 
 const expect = chai.expect;
@@ -14,8 +13,12 @@ describe('GetIndexNames', () => {
   });
 
   it('it should return names', async () => {
-    process.env = localSettings.Values;
-    nock(`https://${process.env['apim-host-name']}`)
+    process.env = {
+      'apim-api-key': 'key',
+      'apim-api-version': '2019-01-01',
+      'apim-host-name': 'hostname',
+    };
+    nock('https://hostname/')
       .get(/subscriptions/)
       .times(1)
       .query({ 'api-version': '2019-01-01' })
@@ -30,8 +33,12 @@ describe('GetIndexNames', () => {
     expect(response.active).to.equal('organisationlookup-2-0-b-dev');
   });
   it('it should handle 404\'s', async () => {
-    process.env = localSettings.Values;
-    nock(`https://${process.env['apim-host-name']}`)
+    process.env = {
+      'apim-api-key': 'key',
+      'apim-api-version': '2019-01-01',
+      'apim-host-name': 'hostname',
+    };
+    nock('https://hostname/')
       .get(/subscriptions/)
       .times(1)
       .query({ 'api-version': '2019-01-01' })
