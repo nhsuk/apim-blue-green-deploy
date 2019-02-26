@@ -30,7 +30,9 @@ module.exports = function* orchestratorFunctionGenerator(context) {
   );
 
   const polling = { interval: 60, units: 'seconds' };
-  const expiryTime = moment().add(polling.interval * 15, polling.units);
+  const expiryTime = moment
+    .utc(context.df.currentUtcDateTime)
+    .add(polling.interval * 15, polling.units);
 
   while (moment.utc(context.df.currentUtcDateTime).isBefore(expiryTime)) {
     // Put wait at beginning of loop rather than end so that reindexing is
