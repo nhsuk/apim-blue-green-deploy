@@ -1,6 +1,5 @@
 const chai = require('chai');
 const nock = require('nock');
-const errors = require('request-promise-native/errors');
 const chaiAsPromised = require('chai-as-promised');
 const getIndexNames = require('../../GetIndexNames/index');
 
@@ -8,16 +7,20 @@ const expect = chai.expect;
 chai.use(chaiAsPromised);
 
 describe('GetIndexNames', () => {
-  afterEach('clean nock', () => {
-    nock.cleanAll();
-  });
-
-  it('it should return names', async () => {
+  const apimIndexName = 'service-search-organisations';
+  beforeEach('set up environment', () => {
     process.env = {
       'apim-api-key': 'key',
       'apim-api-version': '2019-01-01',
       'apim-host-name': 'hostname',
     };
+  });
+
+  afterEach('clean nock', () => {
+    nock.cleanAll();
+  });
+
+  it('it should return names', async () => {
     nock('https://hostname/')
       .get(/subscriptions/)
       .times(1)
@@ -27,17 +30,12 @@ describe('GetIndexNames', () => {
     const context = {
       log: () => { },
     };
-    const response = await getIndexNames(context, 'service-search-organisations');
+    const response = await getIndexNames(context, apimIndexName);
     expect(response).to.not.be.null;
     expect(response.idle).to.equal('organisationlookup-2-0-a-dev');
     expect(response.active).to.equal('organisationlookup-2-0-b-dev');
   });
   it('it should handle 404\'s', async () => {
-    process.env = {
-      'apim-api-key': 'key',
-      'apim-api-version': '2019-01-01',
-      'apim-host-name': 'hostname',
-    };
     nock('https://hostname/')
       .get(/subscriptions/)
       .times(1)
@@ -47,7 +45,7 @@ describe('GetIndexNames', () => {
     const context = {
       log: () => { },
     };
-    await expect(getIndexNames(context, 'service-search-organisations'))
-      .to.be.rejectedWith(errors.StatusCodeError, '404 - "Not Found"');
+    await expect(getIndexNames(context, apimIndexName))
+      .to.be.rejectedWith(Error, `Could not get index names for API manager index '${apimIndexName}' (404 - "Not Found")`);
   });
 });
