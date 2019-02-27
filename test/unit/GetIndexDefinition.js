@@ -49,7 +49,7 @@ describe('GetIndexDefinition', () => {
         .query({ 'api-version': '2017-11-11' })
         .reply(404, 'Not Found');
 
-      await expect(getIndexDefinition(context))
+      expect(getIndexDefinition(context))
         .to.be.rejectedWith(Error, `Could not get index definition for index '${indexName}' (404 - "Not Found")`);
     });
   });

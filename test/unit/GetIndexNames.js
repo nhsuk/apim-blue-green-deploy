@@ -45,7 +45,7 @@ describe('GetIndexNames', () => {
     const context = {
       log: () => { },
     };
-    await expect(getIndexNames(context, apimIndexName))
+    expect(getIndexNames(context, apimIndexName))
       .to.be.rejectedWith(Error, `Could not get index names for API manager index '${apimIndexName}' (404 - "Not Found")`);
   });
 });

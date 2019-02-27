@@ -41,7 +41,7 @@ describe('GetIndexerStatus', () => {
       .query({ 'api-version': '2017-11-11' })
       .reply(404, 'Not Found');
 
-    await expect(getIndexerStatus(context))
+    expect(getIndexerStatus(context))
       .to.be.rejectedWith(Error, `Could not get status for indexer '${indexerName}' (404 - "Not Found")`);
   });
   it('should throw an exception if the indexer status is error', async () => {
@@ -51,7 +51,7 @@ describe('GetIndexerStatus', () => {
       .query({ 'api-version': '2017-11-11' })
       .reply(200, { status: 'error' });
 
-    await expect(getIndexerStatus(context))
+    expect(getIndexerStatus(context))
       .to.be.rejectedWith(Error, `indexer '${indexerName}' is in an error state`);
   });
 });

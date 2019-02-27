@@ -61,7 +61,7 @@ describe('GetIndexDefinition', () => {
       .query({ 'api-version': '2019-01-01' })
       .reply(404, 'Not Found');
 
-    await expect(switchAliasedIndex(context))
+    expect(switchAliasedIndex(context))
       .to.be.rejectedWith(Error, `Could not get API Manager API definition for '${apimApiName}' (404 - "Not Found")`);
   });
   it('should handle HTTP errors when putting the updated API definition', async () => {
@@ -77,7 +77,7 @@ describe('GetIndexDefinition', () => {
       .query({ 'api-version': '2019-01-01' })
       .reply(500, 'Internal Server Error');
 
-    await expect(switchAliasedIndex(context))
+    expect(switchAliasedIndex(context))
       .to.be.rejectedWith(Error, `Could not update the API Manager API definition for '${apimApiName}' (500 - "Internal Server Error")`);
   });
 });

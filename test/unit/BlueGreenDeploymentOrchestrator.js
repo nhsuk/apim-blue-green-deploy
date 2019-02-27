@@ -88,8 +88,8 @@ describe('BlueGreenDeploymentOrchestrator', () => {
   });
   it('failure to complete indexing in time should throw exception', () => {
     const indexNames = { active: 'index-1', idle: 'index-2' };
-    const apimIndexName = 'api';
-    const input = { apimApiName: apimIndexName };
+    const apimApiName = 'api';
+    const input = { apimApiName };
     const stubCallActivity = sinon.stub();
     stubCallActivity.withArgs('GetIndexNames').returns(indexNames);
     stubCallActivity.withArgs('GetIndexerStatus').onFirstCall().returns('success');
