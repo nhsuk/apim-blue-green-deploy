@@ -29,27 +29,21 @@ module.exports = function* orchestratorFunctionGenerator(context) {
     }
   );
 
-  const polling = { interval: 60, units: 'seconds' };
-  const expiryTime = moment
-    .utc(context.df.currentUtcDateTime)
-    .add(polling.interval * 15, polling.units);
-
-  while (moment.utc(context.df.currentUtcDateTime).isBefore(expiryTime)) {
+  while (true) {
     // Put wait at beginning of loop rather than end so that reindexing is
     // underway before first checking status
     const nextCheck = moment
       .utc(context.df.currentUtcDateTime)
-      .add(polling.interval, polling.units);
+      .add('1', 'minute');
     yield context.df.createTimer(nextCheck.toDate());
     const indexerStatus = yield context.df.callActivity('GetIndexerStatus', indexerName);
     context.log({ indexerStatus });
     if (indexerStatus === 'success') {
       yield context.df.callActivity('SwitchAliasedIndex', { apimApiName, idleIndexName: indexNames.idle });
       return 'done';
-    } if (indexerStatus !== 'inProgress') {
+    }
+    if (indexerStatus !== 'inProgress') {
       throw Error(`reindexing of ${indexerName} failed with status ${indexerStatus}`);
     }
   }
-
-  throw Error(`reindexing timed out for ${indexerName}`);
 };

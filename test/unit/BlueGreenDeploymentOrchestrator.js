@@ -86,38 +86,4 @@ describe('BlueGreenDeploymentOrchestrator', () => {
 
     expect(() => { iterateGenerator(generator); }).to.throw('reindexing of index-2 failed with status persistentFailure');
   });
-  it('failure to complete indexing in time should throw exception', () => {
-    const indexNames = { active: 'index-1', idle: 'index-2' };
-    const apimApiName = 'api';
-    const input = { apimApiName };
-    const stubCallActivity = sinon.stub();
-    stubCallActivity.withArgs('GetIndexNames').returns(indexNames);
-    stubCallActivity.withArgs('GetIndexerStatus').onFirstCall().returns('success');
-    stubCallActivity.withArgs('GetIndexerStatus').returns('inProgress');
-    const stubCreateTimer = sinon.stub();
-
-    const df = {
-      callActivity: stubCallActivity,
-      createTimer: stubCreateTimer,
-      currentUtcDateTime: undefined,
-      getInput: sinon.fake.returns(input),
-    };
-
-    let momentCount = 0;
-
-    // stub to move time along
-    sinon.stub(df, 'currentUtcDateTime').get(() => {
-      momentCount += 1;
-      return moment().add(60 * momentCount, 's');
-    });
-
-    const context = {
-      df,
-      log: () => { },
-    };
-
-    const generator = blueGreenDeploymentGeneratorFunction(context);
-
-    expect(() => { iterateGenerator(generator); }).to.throw('reindexing timed out for index-2');
-  });
 });
