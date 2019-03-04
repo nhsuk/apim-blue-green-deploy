@@ -8,14 +8,14 @@ chai.use(chaiAsPromised);
 
 describe('GetIndexerLastRunStatus', () => {
   const indexerName = 'indexer-1';
-  const context = { bindings: { indexerName } };
+  const searchApiVersion = '2019-03-04';
+  const context = { bindings: { parameters: { indexerName, searchApiVersion } } };
   afterEach('clean nock', () => {
     nock.cleanAll();
   });
   beforeEach('set up environment', () => {
     process.env = {
       'search-api-admin-key': 'key',
-      'search-api-version': '2017-11-11',
       'search-hostname': 'hostname',
     };
   });
@@ -24,7 +24,7 @@ describe('GetIndexerLastRunStatus', () => {
     nock('https://hostname/')
       .get(/indexers/)
       .times(1)
-      .query({ 'api-version': '2017-11-11' })
+      .query({ 'api-version': searchApiVersion })
       .reply(200, {
         lastResult: { status: 'aStatus' },
         status: 'running',
@@ -38,7 +38,7 @@ describe('GetIndexerLastRunStatus', () => {
     nock('https://hostname/')
       .get(/indexers/)
       .times(1)
-      .query({ 'api-version': '2017-11-11' })
+      .query({ 'api-version': searchApiVersion })
       .reply(404, 'Not Found');
 
     await expect(getIndexerStatus(context))
