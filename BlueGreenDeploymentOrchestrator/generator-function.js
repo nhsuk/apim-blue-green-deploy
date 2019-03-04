@@ -13,6 +13,12 @@ module.exports = function* orchestratorFunctionGenerator(context) {
   // Because of the naming convention which applies the same name to the indexer and data source
   // as for the index we can do this
   const indexerName = indexNames.idle;
+
+  const indexerStatus = yield context.df.callActivity('GetIndexerStatus', indexerName);
+  if (indexerStatus === 'error') {
+    throw Error(`indexer ${indexerName} returned an error status`);
+  }
+
   const startingIndexerStatus = yield context.df.callActivity('GetIndexerLastRunStatus', indexerName);
   if (startingIndexerStatus === 'inProgress') {
     throw Error(`indexer ${indexerName} is currently running`);
@@ -36,14 +42,14 @@ module.exports = function* orchestratorFunctionGenerator(context) {
       .utc(context.df.currentUtcDateTime)
       .add('1', 'minute');
     yield context.df.createTimer(nextCheck.toDate());
-    const indexerStatus = yield context.df.callActivity('GetIndexerLastRunStatus', indexerName);
-    context.log({ indexerStatus });
-    if (indexerStatus === 'success') {
+    const indexerLastRunStatus = yield context.df.callActivity('GetIndexerLastRunStatus', indexerName);
+    context.log({ indexerLastRunStatus });
+    if (indexerLastRunStatus === 'success') {
       yield context.df.callActivity('SwitchAliasedIndex', { apimApiName, idleIndexName: indexNames.idle });
       return 'done';
     }
-    if (indexerStatus !== 'inProgress') {
-      throw Error(`reindexing of ${indexerName} failed with status ${indexerStatus}`);
+    if (indexerLastRunStatus !== 'inProgress') {
+      throw Error(`reindexing of ${indexerName} failed with status ${indexerLastRunStatus}`);
     }
   }
 };

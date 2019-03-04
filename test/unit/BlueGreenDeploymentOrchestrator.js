@@ -63,6 +63,29 @@ describe('BlueGreenDeploymentOrchestrator', () => {
 
     expect(() => { iterateGenerator(generator); }).to.throw('indexer index-2 is currently running');
   });
+  it('indexer in error should throw exception', () => {
+    const indexNames = { active: 'index-1', idle: 'index-2' };
+    const apimIndexName = 'api';
+    const input = { apimApiName: apimIndexName };
+    const stubCallActivity = sinon.stub();
+    stubCallActivity.withArgs('GetIndexNames').returns(indexNames);
+    stubCallActivity.withArgs('GetIndexerStatus').returns('error');
+    const stubCreateTimer = sinon.stub();
+
+    const context = {
+      df: {
+        callActivity: stubCallActivity,
+        createTimer: stubCreateTimer,
+        currentUtcDateTime: moment(),
+        getInput: sinon.fake.returns(input),
+      },
+      log: () => { },
+    };
+
+    const generator = blueGreenDeploymentGeneratorFunction(context);
+
+    expect(() => { iterateGenerator(generator); }).to.throw(`indexer ${indexNames.idle} returned an error status`);
+  });
   it('indexer failure should throw exception', () => {
     const indexNames = { active: 'index-1', idle: 'index-2' };
     const apimIndexName = 'api';
