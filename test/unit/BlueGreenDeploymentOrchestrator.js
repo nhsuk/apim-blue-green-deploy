@@ -20,7 +20,7 @@ describe('BlueGreenDeploymentOrchestrator', () => {
     const input = { apimApiName: apimIndexName };
     const stubCallActivity = sinon.stub();
     stubCallActivity.withArgs('GetIndexNames').returns(indexNames);
-    stubCallActivity.withArgs('GetIndexerStatus')
+    stubCallActivity.withArgs('GetIndexerLastRunStatus')
       .onFirstCall().returns('success')
       .onSecondCall()
       .returns('inProgress')
@@ -49,7 +49,7 @@ describe('BlueGreenDeploymentOrchestrator', () => {
     const input = { apimApiName: apimIndexName };
     const stubCallActivity = sinon.stub();
     stubCallActivity.withArgs('GetIndexNames').returns(indexNames);
-    stubCallActivity.withArgs('GetIndexerStatus').returns('inProgress');
+    stubCallActivity.withArgs('GetIndexerLastRunStatus').returns('inProgress');
 
     const context = {
       df: {
@@ -69,7 +69,7 @@ describe('BlueGreenDeploymentOrchestrator', () => {
     const input = { apimApiName: apimIndexName };
     const stubCallActivity = sinon.stub();
     stubCallActivity.withArgs('GetIndexNames').returns(indexNames);
-    stubCallActivity.withArgs('GetIndexerStatus').returns('persistentFailure');
+    stubCallActivity.withArgs('GetIndexerLastRunStatus').returns('persistentFailure');
     const stubCreateTimer = sinon.stub();
 
     const context = {
