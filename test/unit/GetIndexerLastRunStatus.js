@@ -1,12 +1,12 @@
 const chai = require('chai');
 const nock = require('nock');
 const chaiAsPromised = require('chai-as-promised');
-const getIndexerStatus = require('../../GetIndexerStatus/index');
+const getIndexerStatus = require('../../GetIndexerLastRunStatus/index');
 
 const expect = chai.expect;
 chai.use(chaiAsPromised);
 
-describe('GetIndexerStatus', () => {
+describe('GetIndexerLastRunStatus', () => {
   const indexerName = 'indexer-1';
   const context = { bindings: { indexerName } };
   afterEach('clean nock', () => {
@@ -26,12 +26,13 @@ describe('GetIndexerStatus', () => {
       .times(1)
       .query({ 'api-version': '2017-11-11' })
       .reply(200, {
+        lastResult: { status: 'aStatus' },
         status: 'running',
       });
 
     const response = await getIndexerStatus(context);
     expect(response).to.not.be.null;
-    expect(response).to.equal('running');
+    expect(response).to.equal('aStatus');
   });
   it('should handle HTTP error statuses', async () => {
     nock('https://hostname/')
@@ -41,6 +42,6 @@ describe('GetIndexerStatus', () => {
       .reply(404, 'Not Found');
 
     await expect(getIndexerStatus(context))
-      .to.be.rejectedWith(Error, `Could not get status for indexer '${indexerName}' (404 - "Not Found")`);
+      .to.be.rejectedWith(Error, `Could not get last run status for indexer '${indexerName}' (404 - "Not Found")`);
   });
 });
