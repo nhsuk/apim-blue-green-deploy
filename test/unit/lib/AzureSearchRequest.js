@@ -19,6 +19,7 @@ describe('AzureSearchRequest', () => {
   });
 
   it('should make correctly set up HTTP request with parameters', async () => {
+    const searchApiVersion = '2017-11-11';
     const expectedHeaders = {
       reqheaders: {
         'Content-Type': 'application/json',
@@ -28,10 +29,13 @@ describe('AzureSearchRequest', () => {
     nock('https://hostname/', expectedHeaders)
       .get(/path/, {})
       .times(1)
-      .query({ 'api-version': '2017-11-11' })
+      .query({ 'api-version': searchApiVersion })
       .reply(200);
 
-    const response = await azureSearchRequest('https://hostname/path', 'get', '{}', '2017-11-11');
+    const response = await azureSearchRequest('path', {
+      method: 'get',
+      searchApiVersion,
+    });
     expect(response).to.not.be.null;
     expect(response.statusCode).to.equal(200);
   });
