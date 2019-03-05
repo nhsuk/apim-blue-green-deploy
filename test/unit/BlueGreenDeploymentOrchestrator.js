@@ -42,7 +42,7 @@ describe('BlueGreenDeploymentOrchestrator', () => {
         indexerName: indexNames.idle,
         searchApiVersion,
       })
-      .returns({});
+      .returns();
     stubCallActivity
       .withArgs('SwitchAliasedIndex', { apimApiName, idleIndexName: indexNames.idle })
       .returns();

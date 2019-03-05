@@ -1,26 +1,15 @@
 const chai = require('chai');
 const nock = require('nock');
 const chaiAsPromised = require('chai-as-promised');
-const reindex = require('../../ReIndex/index');
+const getIndexDefinition = require('../../GetIndexDefinition/index');
 
 const expect = chai.expect;
 chai.use(chaiAsPromised);
 
-describe('ReIndex', () => {
-  const indexName = 'index-1';
-  const indexerName = 'indexer-1';
+describe('GetIndexDefinition', () => {
   const searchApiVersion = '2017-11-11';
-  const indexDefinition = { anotherField: 'value', name: indexName };
-  const context = {
-    bindings: {
-      parameters: {
-        indexDefinition,
-        indexName,
-        indexerName,
-        searchApiVersion,
-      },
-    },
-  };
+  const indexName = 'index-1';
+  const context = { bindings: { parameters: { indexName, searchApiVersion } } };
 
   beforeEach('set up environment', () => {
     process.env = {
@@ -31,20 +20,25 @@ describe('ReIndex', () => {
   afterEach('clean nock', () => {
     nock.cleanAll();
   });
-  describe('ReIndex', async () => {
-    it('should run a reindex', async () => {
+  describe('index definition get', async () => {
+    const indexDefinition = { anotherField: 'value', name: indexName };
+    it('should return index definition', async () => {
       nock('https://hostname/')
-        .put(new RegExp(`indexes/${indexName}`), indexDefinition)
+        .get(/indexes/)
         .times(1)
         .query({ 'api-version': searchApiVersion })
-        .reply(200);
-      nock('https://hostname/')
-        .post(new RegExp(`indexers/${indexerName}/run`))
-        .times(1)
-        .query({ 'api-version': searchApiVersion })
-        .reply(200);
-      const response = await reindex(context);
+        .reply(200, indexDefinition);
+      const response = await getIndexDefinition(context);
       expect(response).to.not.be.null;
+    });
+    it('should remove index name from index definition', async () => {
+      nock('https://hostname/')
+        .get(/indexes/)
+        .times(1)
+        .query({ 'api-version': searchApiVersion })
+        .reply(200, indexDefinition);
+      const response = await getIndexDefinition(context);
+      expect(response).to.deep.equal({ anotherField: 'value' });
     });
   });
   describe('error handling', async () => {
@@ -55,8 +49,8 @@ describe('ReIndex', () => {
         .query({ 'api-version': searchApiVersion })
         .reply(404, 'Not Found');
 
-      await expect(reindex(context))
-        .to.be.rejectedWith(Error, `Could not run indexer '${indexerName}' (404 - "Not Found")`);
+      await expect(getIndexDefinition(context))
+        .to.be.rejectedWith(Error, `Could not get index definition for index '${indexName}' (404 - "Not Found")`);
     });
   });
 });
