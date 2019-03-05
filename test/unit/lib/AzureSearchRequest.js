@@ -56,4 +56,21 @@ describe('AzureSearchRequest', () => {
     expect(response).to.not.be.null;
     expect(response.statusCode).to.equal(200);
   });
+  it('should throw error if search API version is unknown', async () => {
+    const searchApiVersion = 'unknown-version';
+    const expectedHeaders = {
+      reqheaders: {
+        'Content-Type': 'application/json',
+        'api-key': 'key',
+      },
+    };
+    nock('https://hostname/', expectedHeaders)
+      .get(/path/, {})
+      .times(1)
+      .query({ 'api-version': searchApiVersion })
+      .reply(200);
+
+    await expect(azureSearchRequest('path', { searchApiVersion }))
+      .to.be.rejectedWith(Error, `The API version '${searchApiVersion}' can not be handled.`);
+  });
 });
