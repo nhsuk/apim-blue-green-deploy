@@ -3,10 +3,10 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "appName": {
-      "value": "nhsuk-apim-blue-green-deploy-func-dev-ne"
+      "value": "to-be-overridden-appName"
     },
     "appPlan": {
-      "value": "nhsukfunctionplandevne"
+      "value": "to-be-overridden-appPlan"
     }
   }
 }
