@@ -16,26 +16,47 @@ function iterateGenerator(generator) {
 describe('BlueGreenDeploymentOrchestrator', () => {
   it('happy path should return \'done\'', () => {
     const indexNames = { active: 'index-1', idle: 'index-2' };
-    const apimIndexName = 'api';
-    const input = { apimApiName: apimIndexName };
+    const indexerName = 'index-2';
+    const searchApiVersion = '2017-11-11';
+    const apimApiName = 'api';
+    const input = { apimApiName, searchApiVersion };
+    const searchParameters = { indexerName, searchApiVersion };
     const stubCallActivity = sinon.stub();
-    stubCallActivity.withArgs('GetIndexNames').returns(indexNames);
-    stubCallActivity.withArgs('GetIndexerLastRunStatus')
+    stubCallActivity.withArgs('GetIndexNames', apimApiName).returns(indexNames);
+    stubCallActivity
+      .withArgs('GetIndexerStatus', searchParameters)
+      .returns(indexNames);
+    stubCallActivity.withArgs('GetIndexerLastRunStatus', searchParameters)
       .onFirstCall().returns('success')
       .onSecondCall()
       .returns('inProgress')
       .onThirdCall()
       .returns('success');
-    const stubCreateTimer = sinon.stub();
+    stubCallActivity
+      .withArgs('GetIndexDefinition', { indexName: indexNames.active, searchApiVersion })
+      .returns({});
+    stubCallActivity
+      .withArgs('ReIndex', {
+        indexDefinition: {},
+        indexName: indexNames.idle,
+        indexerName: indexNames.idle,
+        searchApiVersion,
+      })
+      .returns({});
+    stubCallActivity
+      .withArgs('SwitchAliasedIndex', { apimApiName, idleIndexName: indexNames.idle })
+      .returns();
+    // Makes stub act like a mock to check all CallActivity calls are stubbed with appropriate args
+    stubCallActivity.throwsArg(0);
 
     const context = {
       df: {
         callActivity: stubCallActivity,
-        createTimer: stubCreateTimer,
+        createTimer: sinon.fake(),
         currentUtcDateTime: moment(),
         getInput: sinon.fake.returns(input),
       },
-      log: () => { },
+      log: sinon.fake(),
     };
 
     const generator = blueGreenDeploymentGeneratorFunction(context);
