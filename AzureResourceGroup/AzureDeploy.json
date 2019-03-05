@@ -27,12 +27,10 @@
     },
     "location": {
       "type": "string",
-      "defaultValue": "North Europe",
+      "defaultValue": "UK South",
       "allowedValues": [
         "UK South",
-        "UK West",
-        "North Europe", 
-        "West Europe"
+        "UK West"
       ],
       "metadata": {
         "description": "Location for all resources."
@@ -119,7 +117,7 @@
       "apiVersion": "2018-05-01-preview",
       "name": "[variables('applicationInsightsName')]",
       "type": "microsoft.insights/components",
-      "location": "North Europe",
+      "location": "UK South",
       "tags": {
         "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', variables('applicationInsightsName'))]": "Resource"
       },
