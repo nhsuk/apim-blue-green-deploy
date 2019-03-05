@@ -1,10 +1,17 @@
 const moment = require('moment');
 
+const checkMandatoryInput = (input, parameterName) => {
+  if (!(input && input[parameterName])) {
+    throw Error(`mandatory parameter '${parameterName}' missing`);
+  }
+  return input[parameterName];
+};
+
 module.exports = function* orchestratorFunctionGenerator(context) {
   const input = context.df.getInput();
   context.log({ input });
 
-  const apimApiName = input.apimApiName;
+  const apimApiName = checkMandatoryInput(input, 'apimApiName');
   const searchApiVersion = input.searchApiVersion;
 
   context.log('Starting Orchestration using Chaining and Monitor patterns');
