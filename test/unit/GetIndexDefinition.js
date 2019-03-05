@@ -9,7 +9,7 @@ chai.use(chaiAsPromised);
 describe('ReIndex', () => {
   const indexName = 'index-1';
   const indexerName = 'indexer-1';
-  const searchApiVersion = '2019-03-04';
+  const searchApiVersion = '2017-11-11';
   const indexDefinition = { anotherField: 'value', name: indexName };
   const context = {
     bindings: {

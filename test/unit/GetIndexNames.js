@@ -8,10 +8,11 @@ chai.use(chaiAsPromised);
 
 describe('GetIndexNames', () => {
   const apimIndexName = 'service-search-organisations';
+  const apimApiVersionId = '2019-01-01';
   beforeEach('set up environment', () => {
     process.env = {
       'apim-api-key': 'key',
-      'apim-api-version': '2019-01-01',
+      'apim-api-version': apimApiVersionId,
       'apim-host-name': 'hostname',
     };
   });
@@ -24,7 +25,7 @@ describe('GetIndexNames', () => {
     nock('https://hostname/')
       .get(/subscriptions/)
       .times(1)
-      .query({ 'api-version': '2019-01-01' })
+      .query({ 'api-version': apimApiVersionId })
       .reply(200, { properties: { serviceUrl: 'https://hostname/indexes/organisationlookup-2-0-b-dev/docs/' } });
 
     const context = {
@@ -39,7 +40,7 @@ describe('GetIndexNames', () => {
     nock('https://hostname/')
       .get(/subscriptions/)
       .times(1)
-      .query({ 'api-version': '2019-01-01' })
+      .query({ 'api-version': apimApiVersionId })
       .reply(404, 'Not Found');
 
     const context = {

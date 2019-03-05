@@ -8,7 +8,7 @@ chai.use(chaiAsPromised);
 
 describe('GetIndexerStatus', () => {
   const indexerName = 'indexer-1';
-  const searchApiVersion = '2019-03-04';
+  const searchApiVersion = '2017-11-11';
   const context = { bindings: { parameters: { indexerName, searchApiVersion } } };
   afterEach('clean nock', () => {
     nock.cleanAll();

@@ -8,6 +8,7 @@ chai.use(chaiAsPromised);
 
 describe('GetIndexDefinition', () => {
   const apimApiName = 'apim-api-1';
+  const apimApiVersionId = '2019-01-01';
   const activeIndexName = 'index-1';
   const idleIndexName = 'index-2';
   const context = {
@@ -24,7 +25,7 @@ describe('GetIndexDefinition', () => {
   beforeEach('set up environment', () => {
     process.env = {
       'apim-api-key': 'key',
-      'apim-api-version': '2019-01-01',
+      'apim-api-version': apimApiVersionId,
       'apim-host-name': 'hostname',
       'apim-resource-group': 'resource-group-1',
       'apim-subscription': 'subscription-1',
@@ -41,13 +42,13 @@ describe('GetIndexDefinition', () => {
     nock('https://hostname/')
       .get(regex)
       .times(1)
-      .query({ 'api-version': '2019-01-01' })
+      .query({ 'api-version': apimApiVersionId })
       .reply(200, { properties: { serviceUrl: `https://hostname/indexes/${activeIndexName}/docs/` } });
 
     const scope = nock('https://hostname/')
       .put(regex, { properties: { serviceUrl: `https://hostname/indexes/${idleIndexName}/docs/` } })
       .times(1)
-      .query({ 'api-version': '2019-01-01' })
+      .query({ 'api-version': apimApiVersionId })
       .reply(200, {});
 
     const response = await switchAliasedIndex(context);
@@ -58,7 +59,7 @@ describe('GetIndexDefinition', () => {
     nock('https://hostname/')
       .get(regex)
       .times(1)
-      .query({ 'api-version': '2019-01-01' })
+      .query({ 'api-version': apimApiVersionId })
       .reply(404, 'Not Found');
 
     await expect(switchAliasedIndex(context))
@@ -68,13 +69,13 @@ describe('GetIndexDefinition', () => {
     nock('https://hostname/')
       .get(regex)
       .times(1)
-      .query({ 'api-version': '2019-01-01' })
+      .query({ 'api-version': apimApiVersionId })
       .reply(200, { properties: { serviceUrl: `https://hostname/indexes/${activeIndexName}/docs/` } });
 
     nock('https://hostname/')
       .put(regex)
       .times(1)
-      .query({ 'api-version': '2019-01-01' })
+      .query({ 'api-version': apimApiVersionId })
       .reply(500, 'Internal Server Error');
 
     await expect(switchAliasedIndex(context))
