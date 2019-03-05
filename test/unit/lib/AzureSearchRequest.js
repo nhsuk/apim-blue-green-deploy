@@ -13,7 +13,6 @@ describe('AzureSearchRequest', () => {
   beforeEach('set up environment', () => {
     process.env = {
       'search-api-admin-key': 'key',
-      'search-api-version': '2017-11-11',
       'search-hostname': 'hostname',
     };
   });
