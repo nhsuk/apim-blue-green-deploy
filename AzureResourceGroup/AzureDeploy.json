@@ -29,6 +29,7 @@
       "type": "string",
       "defaultValue": "UK South",
       "allowedValues": [
+        "North Europe",
         "UK South",
         "UK West"
       ],
