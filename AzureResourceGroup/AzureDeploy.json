@@ -27,12 +27,6 @@
     },
     "location": {
       "type": "string",
-      "defaultValue": "UK South",
-      "allowedValues": [
-        "North Europe",
-        "UK South",
-        "UK West"
-      ],
       "metadata": {
         "description": "Location for all resources."
       }
