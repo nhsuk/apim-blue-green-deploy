@@ -4,12 +4,14 @@
   "parameters": {
     "appName": {
       "type": "string",
+      "defaultValue": "to-be-overridden-appName",
       "metadata": {
         "description": "The name of the function app that you wish to create."
       }
     },
     "appPlan": {
       "type": "string",
+      "defaultValue": "to-be-overridden-appPlan",
       "metadata": {
         "description": "The plan to run the application under."
       }
@@ -27,6 +29,7 @@
     },
     "location": {
       "type": "string",
+      "defaultValue": "to-be-overridden-location",
       "metadata": {
         "description": "Location for all resources."
       }
