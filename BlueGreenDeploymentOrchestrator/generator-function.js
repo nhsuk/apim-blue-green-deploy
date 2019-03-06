@@ -1,4 +1,5 @@
 const moment = require('moment');
+const validateSearchApiVersion = require('../lib/ValidateSearchApiVersion');
 
 const checkMandatoryInput = (input, parameterName) => {
   if (!(input && input[parameterName])) {
@@ -12,7 +13,7 @@ module.exports = function* orchestratorFunctionGenerator(context) {
   context.log({ input });
 
   const apimApiName = checkMandatoryInput(input, 'apimApiName');
-  const searchApiVersion = input.searchApiVersion;
+  const searchApiVersion = validateSearchApiVersion(input.searchApiVersion);
 
   context.log('Starting Orchestration using Chaining and Monitor patterns');
 

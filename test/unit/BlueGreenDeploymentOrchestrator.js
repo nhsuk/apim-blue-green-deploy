@@ -68,7 +68,7 @@ describe('BlueGreenDeploymentOrchestrator', () => {
     });
   });
   describe('error handling', () => {
-    it('missing mandatory parameter', async () => {
+    it('missing mandatory \'apimApiName\' parameter', async () => {
       const searchApiVersion = '2017-11-11';
       const context = {
         df: {
@@ -80,6 +80,22 @@ describe('BlueGreenDeploymentOrchestrator', () => {
       const generator = blueGreenDeploymentGeneratorFunction(context);
 
       await expect(() => { iterateGenerator(generator); }).to.throw('mandatory parameter \'apimApiName\' missing');
+    });
+    it('invalid \'searchApiVersion\' parameter', async () => {
+      const searchApiVersion = 'invalid version';
+      const context = {
+        df: {
+          callActivity: sinon.stub(),
+          getInput: sinon.stub().returns({
+            apimApiName: 'index-1',
+            searchApiVersion,
+          }),
+        },
+        log: sinon.fake(),
+      };
+      const generator = blueGreenDeploymentGeneratorFunction(context);
+
+      await expect(() => { iterateGenerator(generator); }).to.throw('The API version \'invalid version\' can not be handled.');
     });
 
     it('indexer currently indexing should throw exception', () => {
