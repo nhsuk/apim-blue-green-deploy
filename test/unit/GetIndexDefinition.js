@@ -7,13 +7,13 @@ const expect = chai.expect;
 chai.use(chaiAsPromised);
 
 describe('GetIndexDefinition', () => {
+  const searchApiVersion = '2017-11-11';
   const indexName = 'index-1';
-  const context = { bindings: { indexName } };
+  const context = { bindings: { parameters: { indexName, searchApiVersion } } };
 
   beforeEach('set up environment', () => {
     process.env = {
       'search-api-admin-key': 'key',
-      'search-api-version': '2017-11-11',
       'search-hostname': 'hostname',
     };
   });
@@ -26,7 +26,7 @@ describe('GetIndexDefinition', () => {
       nock('https://hostname/')
         .get(/indexes/)
         .times(1)
-        .query({ 'api-version': '2017-11-11' })
+        .query({ 'api-version': searchApiVersion })
         .reply(200, indexDefinition);
       const response = await getIndexDefinition(context);
       expect(response).to.not.be.null;
@@ -35,7 +35,7 @@ describe('GetIndexDefinition', () => {
       nock('https://hostname/')
         .get(/indexes/)
         .times(1)
-        .query({ 'api-version': '2017-11-11' })
+        .query({ 'api-version': searchApiVersion })
         .reply(200, indexDefinition);
       const response = await getIndexDefinition(context);
       expect(response).to.deep.equal({ anotherField: 'value' });
@@ -46,7 +46,7 @@ describe('GetIndexDefinition', () => {
       nock('https://hostname/')
         .get(/indexes/)
         .times(1)
-        .query({ 'api-version': '2017-11-11' })
+        .query({ 'api-version': searchApiVersion })
         .reply(404, 'Not Found');
 
       await expect(getIndexDefinition(context))

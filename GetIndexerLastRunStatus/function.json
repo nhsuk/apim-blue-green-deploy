@@ -1,7 +1,7 @@
 {
   "bindings": [
     {
-      "name": "indexerName",
+      "name": "parameters",
       "type": "activityTrigger",
       "direction": "in"
     }

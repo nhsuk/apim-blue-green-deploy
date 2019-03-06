@@ -1,10 +1,19 @@
 const moment = require('moment');
+const validateSearchApiVersion = require('../lib/ValidateSearchApiVersion');
+
+const checkMandatoryInput = (input, parameterName) => {
+  if (!(input && input[parameterName])) {
+    throw Error(`mandatory parameter '${parameterName}' missing`);
+  }
+  return input[parameterName];
+};
 
 module.exports = function* orchestratorFunctionGenerator(context) {
   const input = context.df.getInput();
   context.log({ input });
 
-  const apimApiName = input.apimApiName;
+  const apimApiName = checkMandatoryInput(input, 'apimApiName');
+  const searchApiVersion = validateSearchApiVersion(input.searchApiVersion);
 
   context.log('Starting Orchestration using Chaining and Monitor patterns');
 
@@ -14,17 +23,17 @@ module.exports = function* orchestratorFunctionGenerator(context) {
   // as for the index we can do this
   const indexerName = indexNames.idle;
 
-  const indexerStatus = yield context.df.callActivity('GetIndexerStatus', indexerName);
+  const indexerStatus = yield context.df.callActivity('GetIndexerStatus', { indexerName, searchApiVersion });
   if (indexerStatus === 'error') {
     throw Error(`indexer ${indexerName} returned an error status`);
   }
 
-  const startingIndexerStatus = yield context.df.callActivity('GetIndexerLastRunStatus', indexerName);
+  const startingIndexerStatus = yield context.df.callActivity('GetIndexerLastRunStatus', { indexerName, searchApiVersion });
   if (startingIndexerStatus === 'inProgress') {
     throw Error(`indexer ${indexerName} is currently running`);
   }
 
-  const indexDefinition = yield context.df.callActivity('GetIndexDefinition', indexNames.active);
+  const indexDefinition = yield context.df.callActivity('GetIndexDefinition', { indexName: indexNames.active, searchApiVersion });
   context.log({ indexDefinition });
 
   yield context.df.callActivity(
@@ -32,6 +41,8 @@ module.exports = function* orchestratorFunctionGenerator(context) {
     {
       indexDefinition,
       indexName: indexNames.idle,
+      indexerName: indexNames.idle,
+      searchApiVersion,
     }
   );
 
@@ -42,7 +53,7 @@ module.exports = function* orchestratorFunctionGenerator(context) {
       .utc(context.df.currentUtcDateTime)
       .add('1', 'minute');
     yield context.df.createTimer(nextCheck.toDate());
-    const indexerLastRunStatus = yield context.df.callActivity('GetIndexerLastRunStatus', indexerName);
+    const indexerLastRunStatus = yield context.df.callActivity('GetIndexerLastRunStatus', { indexerName, searchApiVersion });
     context.log({ indexerLastRunStatus });
     if (indexerLastRunStatus === 'success') {
       yield context.df.callActivity('SwitchAliasedIndex', { apimApiName, idleIndexName: indexNames.idle });

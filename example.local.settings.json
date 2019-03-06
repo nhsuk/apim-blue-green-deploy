@@ -10,7 +10,6 @@
     "apim-resource-group": "",
     "apim-subscription": "",
     "search-api-admin-key": "",
-    "search-api-version": "",
     "search-hostname": "",
     "task-hub-name": "localdevtaskhub"
   }

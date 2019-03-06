@@ -1,3 +1,4 @@
 {
-  "apimApiName": "service-search-organisations"
+  "apimApiName": "service-search-organisations",
+  "searchApiVersionId": "2017-11-11"
 }
