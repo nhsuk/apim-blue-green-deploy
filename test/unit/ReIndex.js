@@ -50,13 +50,13 @@ describe('ReIndex', () => {
   describe('error handling', async () => {
     it('should handle HTTP error statuses', async () => {
       nock('https://hostname/')
-        .get(/indexes/)
+        .put(/indexes/)
         .times(1)
         .query({ 'api-version': searchApiVersion })
-        .reply(404, 'Not Found');
+        .reply(500, 'Internal server error');
 
       await expect(reindex(context))
-        .to.be.rejectedWith(Error, `Could not run indexer '${indexerName}' (404 - "Not Found")`);
+        .to.be.rejectedWith(Error, `Could not run indexer '${indexerName}' (500 - "Internal server error")`);
     });
   });
 });

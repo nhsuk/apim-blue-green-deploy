@@ -16,6 +16,6 @@ module.exports = async function reindex(context) {
       searchApiVersion,
     });
   } catch (e) {
-    throw Error(`Could not run indexer '${indexerName}' (404 - "Not Found")`);
+    throw Error(`Could not run indexer '${indexerName}' (${e.message})`);
   }
 };
