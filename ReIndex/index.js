@@ -6,14 +6,12 @@ module.exports = async function reindex(context) {
   const searchApiVersion = context.bindings.parameters.searchApiVersion;
   const indexDefinition = context.bindings.parameters.indexDefinition;
   try {
-    await azureSearchRequest(`indexes/${indexName}`, {
+    await azureSearchRequest(`indexes/${indexName}`, searchApiVersion, {
       body: JSON.stringify(indexDefinition),
       method: 'put',
-      searchApiVersion,
     });
-    await azureSearchRequest(`indexers/${indexerName}/run`, {
+    await azureSearchRequest(`indexers/${indexerName}/run`, searchApiVersion, {
       method: 'post',
-      searchApiVersion,
     });
   } catch (e) {
     throw Error(`Could not run indexer '${indexerName}' (${e.message})`);
