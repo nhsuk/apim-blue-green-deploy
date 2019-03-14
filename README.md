@@ -12,20 +12,20 @@ The purpose of this function app is to allow Azure Search indexes to be recreate
 
 API Manager API
 
-* name: service-search-organisations
-* external URL: https://api.nhs.uk/service-search/search
+* name: api-1
+* external URL: https://api.nhs.uk/api-1
 
 Before the function app has run:
 
-* serviceUrl: https://nhsuksearchprodne.search.windows.net/indexes/organisationlookup-a-dev/docs/
+* serviceUrl: https://{search-service-name}.search.windows.net/indexes/index-1-0-a-dev/docs/
 
 after the function app has run:
 
-* serviceUrl: https://nhsuksearchprodne.search.windows.net/indexes/organisationlookup-b-dev/docs/
+* serviceUrl: https://{search-service-name}.search.windows.net/indexes/index-1-0-b-dev/docs/
 
 The index has switched from _a_ to _b_ and _b_ will have been (re)created and indexed from the data source.
 
-You might want to use this approach when Azure Search synchronisation between source data and the search index can not be relied upon. Our particular scenario involved the identifiers for a given organisations not being consistent across data uploads into the data source which, without this approach, resulted in duplicate entries in the index.
+You might want to use this approach when Azure Search synchronisation between source data and the search index can not be relied upon. For example, should the underlying data not have consistent identifiers over time, this could result in duplicate entries within the index.
 
 See [here](https://docs.microsoft.com/en-us/azure/search/search-howto-reindex#how-to-rebuild-an-index) for more background.
 
@@ -66,7 +66,7 @@ The body of the request should contain the following parameters:
 ### Curl example
 
 ``` bash
-curl -s -XPOST "http://{hostname}/api/orchestrators/BlueGreenDeploymentOrchestrator?code={authorisationkey}" -d '{
+curl -s -XPOST "https://{hostname}/api/orchestrators/BlueGreenDeploymentOrchestrator?code={authorisationkey}" -d '{
   "apimApiName": "service-search-organisations",
   "searchApiVersion": "{searchApiVersion}"
 }'
@@ -79,8 +79,7 @@ function returns a 202 response, if successful.
 1. The 202 response contains a `statusQueryGetUri` (also available in the
 `location` header). This URI can be used to monitor the status of the function.
 1. If you try to run the function while the indexer is already running then a HTTP 500 error will be returned.
-
-1. No authorization is required when the function is running locally.
+1. When running locally, no authorization code is required and the protocol should be `http` not `https`
 1. The function is a
 [Durable Function](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-overview)
 which uses the

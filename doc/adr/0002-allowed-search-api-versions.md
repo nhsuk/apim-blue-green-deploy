@@ -4,19 +4,19 @@ Date: 2019-03-13
 
 ## Status
 
-Proposed
+Accepted
 
 ## Context
 
 The REST API for Azure Search requires the API Version identifier to be passed as the query parameter `api-version` for all calls<sup>[1]</sup>.
 
-At the time of writing the General Available version is '2017-11-11' and the Preview version is '2017-11-11-Preview'. Work being done for PIMS involves the creation of an Organisation Profiles index which requires features currently only available in Preview. Attempting to retrieve an index definition for an index which includes Preview features with a query using the GA version in the query parameter `api-version` results in a HTTP error.
+At the time of writing the General Available (GA) version is '2017-11-11' and the Preview version is '2017-11-11-Preview'. Attempting to retrieve an index definition for an index which includes Preview features with a query using the GA version in the query parameter `api-version` results in a HTTP error.
 
 As a result of this we need to support the parametrisation and validation of the search API version. Validation could be against values held in environment variables or against config values within the code itself.
 
 ## Decision
 
-* In order to reduce risk we will not force the use of the Preview API for all indexes since the use of Preview is not recommended in production.
+* In order to maintain backwards compatibility the API Version identifier is an optional property in the payload. The default value is the current GA version.
 
 * The validation will be based on config values **_**within**_** the code to check the api version parameter against a range of allowed values. The reason we have adopted this approach over using environment variables is that the code has been written to support specific versions of the API and therefore the responsibility for establishing this relationship rests with the code not the environment.
 
