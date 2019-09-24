@@ -1,6 +1,6 @@
 {
   "name": "index-switch",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A function app to switch between an active and idle index to allow for zero azure search downtime with reindexing",
   "main": "index.js",
   "directories": {

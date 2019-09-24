@@ -58,10 +58,10 @@ and are easy to use. Either through a
 
 The body of the request should contain the following parameters:
 
-| name | mandatory | description | default |
-|------|-----------|-------------|---------| 
-| apimApiName | yes | The name of the API in Azure API Manager | n/a |
-| searchApiVersion | no | The version identifier for the Azure Search API | 2017-11-11 |
+| Name | Description | Default | Allowable Values | Required |
+|------|-----------|-------------|---------| ---------------- |
+| apimApiName | The name of the API in Azure API Manager | | | yes |
+| searchApiVersion | The version identifier for the Azure Search API| 2017-11-11 | 2019-05-06 | no |
 
 ### Curl example
 
