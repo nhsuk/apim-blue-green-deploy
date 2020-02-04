@@ -34,6 +34,11 @@ describe('ReIndex', () => {
   describe('ReIndex', async () => {
     it('should run a reindex', async () => {
       nock('https://hostname/')
+        .delete(new RegExp(`indexes/${indexName}`))
+        .times(1)
+        .query({ 'api-version': searchApiVersion })
+        .reply(200);
+      nock('https://hostname/')
         .put(new RegExp(`indexes/${indexName}`), indexDefinition)
         .times(1)
         .query({ 'api-version': searchApiVersion })
@@ -50,7 +55,7 @@ describe('ReIndex', () => {
   describe('error handling', async () => {
     it('should handle HTTP error statuses', async () => {
       nock('https://hostname/')
-        .put(/indexes/)
+        .delete(/indexes/)
         .times(1)
         .query({ 'api-version': searchApiVersion })
         .reply(500, 'Internal server error');
