@@ -43,6 +43,11 @@ describe('ReIndex', () => {
         .times(1)
         .query({ 'api-version': searchApiVersion })
         .reply(200);
+        nock('https://hostname/')
+          .post(new RegExp(`indexers/${indexerName}/reset`))
+          .times(1)
+          .query({ 'api-version': searchApiVersion })
+          .reply(200);
       nock('https://hostname/')
         .post(new RegExp(`indexers/${indexerName}/run`))
         .times(1)
