@@ -1,4 +1,4 @@
-1.2.0 / 2020-02-04
+1.3.0 / 2020-02-06
 ==================
 - On reindexing rebuild index from scratch to pickup deletes
 
