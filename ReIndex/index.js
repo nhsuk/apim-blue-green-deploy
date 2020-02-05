@@ -7,8 +7,14 @@ module.exports = async function reindex(context) {
   const indexDefinition = context.bindings.parameters.indexDefinition;
   try {
     await azureSearchRequest(`indexes/${indexName}`, searchApiVersion, {
+      method: 'delete',
+    });
+    await azureSearchRequest(`indexes/${indexName}`, searchApiVersion, {
       body: JSON.stringify(indexDefinition),
       method: 'put',
+    });
+    await azureSearchRequest(`indexers/${indexerName}/reset`, searchApiVersion, {
+      method: 'post',
     });
     await azureSearchRequest(`indexers/${indexerName}/run`, searchApiVersion, {
       method: 'post',
