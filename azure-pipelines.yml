@@ -1,6 +1,15 @@
 pool:
   vmImage: 'ubuntu-16.04'
 
+trigger:
+  batch: false
+  branches:
+    include:
+    - '*'
+  tags:
+    include:
+    - '*'
+
 steps:
   - bash: sudo apt-get install azure-functions-core-tools
     displayName: 'sudo apt-get install azure-functions-core-tools'
@@ -16,6 +25,7 @@ steps:
 
   - script: npm run test-ci
     displayName: 'npm run test-ci'
+
 
   - task: PublishCodeCoverageResults@1
     inputs:
